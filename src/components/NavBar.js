@@ -23,7 +23,7 @@ function NavBar({
 }) {
   return (
     <nav>
-      <h1 className="nav-p">Blue Market</h1>
+      <h3 className="nav-p">Blue Market</h3>
       <button
         className={`nav-button`}
         onClick={() =>
