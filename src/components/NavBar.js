@@ -37,12 +37,7 @@ function NavBar({
       <button className={`nav-button`} onClick={() => onChatToggle("filter")}>
         <FontAwesomeIcon icon={faFilter} />
       </button>
-      <div className="nav-search">
-        <input type="text" placeholder="Search..." />
-        <button type="submit">
-          <FontAwesomeIcon icon={faSearch} />
-        </button>
-      </div>
+      
       <button
         id="add-product-button"
         className="add-product-button"
