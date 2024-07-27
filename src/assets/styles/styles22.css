@@ -1,0 +1,167 @@
+h1 , p {
+    color : rgb(0, 0, 140);
+    
+    margin: 0px;
+}
+h1{padding-bottom: 0px;
+    margin-top: 0;
+    font-size: 10vh;
+    text-align: justify;
+    word-spacing: 4px;
+      letter-spacing: 2px;
+}
+p{margin-bottom: 30px;
+    font-size: 4vh;
+    text-align: justify;
+  }
+  h2,h3{
+    text-align: center;
+    color: #0000a0;
+    font-size: 8vh;
+    margin: 5px;
+  }
+.nav-p {
+    padding: 10px 10px 0px 19px;
+    font-size:30px;
+    color:rgb(0, 0, 140);
+
+}
+nav{
+    margin-top: 10px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    position: relative; /* يحدد موضع العناصر الموجودة داخل الجسم */
+    background: #fcfcf2;
+}
+
+.container {
+    
+  
+    margin: 50px 0 0 0;
+    display: flex;
+    justify-content: space-between; /* يوزع العناصر بالتساوي في العرض */
+    align-items: flex-start; /* يُوسِّط العناصر عمودياً */
+    height: 100vh; /* يجعل العنصر يأخذ ارتفاع الشاشة بالكامل */
+}
+
+.left {
+    padding-left: 50px;
+    margin-left: 5px;
+   
+    width: 50%; /* يأخذ النصف الأيسر من الصفحة */
+    text-align: left; /* يأخذ النص الجانب الأيسر داخل العنصر */
+   height: 60%;
+}
+
+.right {
+    width: 50%; /* يأخذ النصف الأيمن من الصفحة */
+    text-align: center; /* يُوسِّط النص داخل العنصر */
+    height: 60%;
+}
+
+img {
+    display: block;
+    width: 70%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+.visit-btn{
+    display: block;
+    margin: 0 auto;
+ 
+}
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: rgb(00,00,140);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.button1 {
+    position: absolute;
+    top: 0;
+    right: 105px; /* تحديد المسافة بين الأزرار */
+    margin: 0;
+}
+
+.button2 {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    margin: 0;
+}
+button:hover {
+    background-color:rgb(255, 255, 255) ; /* تغيير لون الزر عند التأشير عليه */
+    color:  #0000a0;
+    border: #0000a0 solid 2px;
+}
+
+button:active {
+    background-color: #9c9c9c; /* تغيير لون الزر عند الضغط عليه */
+    color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+form {
+
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  max-width: 800px;
+  background-color: #f9f9f9;
+}
+
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.form-fields {
+  display: flex;
+  justify-content: space-between; /* توزيع الفيلدست بجانب بعضها */
+  gap: 20px; /* مسافة بين الفيلدست */
+}
+
+fieldset {
+  border: none;
+  padding: 30px;
+  margin: 0;
+  flex: 1; /* جعل الفيلدست تأخذ نفس العرض */
+  min-width: 0; /* لتحسين التوافق في العرض */
+}
+form button {
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  padding: 10px;
+  background-color: rgb(00,00,140);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+form button:active {
+  background-color: #9c9c9c;
+  color: white;
+}
