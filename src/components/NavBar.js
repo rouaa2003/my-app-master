@@ -16,7 +16,7 @@ function NavBar({
   isAuthenticated,
   onAddProductClick,
   onProfileClick,
-  onChatToggle,
+  
   onLoginClick,
   onRegisterClick,
   onLogout,
@@ -49,14 +49,7 @@ function NavBar({
       >
         <FontAwesomeIcon icon={faUserCircle} />
       </button>
-      <button
-        className={`nav-button chat-icon`}
-        id="chat-toggle"
-        onClick={onChatToggle}
-        style={{ marginRight: "30px" }}
-      >
-        <FontAwesomeIcon icon={faComments} />
-      </button>
+      
       {!isAuthenticated ? (
         <>
           <button className="nav-button login-button" onClick={onLoginClick}>

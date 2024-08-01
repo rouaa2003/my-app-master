@@ -6,7 +6,7 @@ import ProductGrid from "./components/ProductGrid";
 import Footer from "./components/Footer";
 import AddProductForm from "./components/AddProductForm";
 import ProfileModal from "./components/ProfileModal";
-import ChatContainer from "./components/ChatContainer";
+
 import LoginForm from "./components/LoginForm";
 import RegistrationForm from "./components/RegistrationForm";
 import LandingPage from "./components/LandingPage";
@@ -16,7 +16,7 @@ import "./App.css";
 function App() {
   const [isAddProductOpen, setAddProductOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
-  const [isChatOpen, setChatOpen] = useState(false);
+  
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,7 +61,7 @@ function App() {
   const handleAddProductClick = () => {
     setAddProductOpen(true);
     setProfileOpen(false);
-    setChatOpen(false);
+    
     setLoginOpen(false);
     setRegisterOpen(false);
   };
@@ -69,15 +69,7 @@ function App() {
   const handleProfileClick = () => {
     setProfileOpen(true);
     setAddProductOpen(false);
-    setChatOpen(false);
-    setLoginOpen(false);
-    setRegisterOpen(false);
-  };
-
-  const handleChatToggle = () => {
-    setChatOpen((prev) => !prev);
-    setAddProductOpen(false);
-    setProfileOpen(false);
+    
     setLoginOpen(false);
     setRegisterOpen(false);
   };
@@ -86,7 +78,7 @@ function App() {
     setLoginOpen(true);
     setAddProductOpen(false);
     setProfileOpen(false);
-    setChatOpen(false);
+    
     setRegisterOpen(false);
   };
 
@@ -99,7 +91,7 @@ function App() {
     setRegisterOpen(true);
     setAddProductOpen(false);
     setProfileOpen(false);
-    setChatOpen(false);
+    
     setLoginOpen(false);
   };
 
@@ -123,15 +115,14 @@ function App() {
             isAuthenticated={isAuthenticated}
             onAddProductClick={handleAddProductClick}
             onProfileClick={handleProfileClick}
-            onChatToggle={handleChatToggle}
+            
             onLoginClick={handleLoginClick}
             onRegisterClick={handleRegisterClick}
             onLogout={handleLogout}
           />
-          <Header isChatOpen={isChatOpen} />
+          <Header />
           <main>
             <ProductGrid
-              isChatOpen={isChatOpen}
               currentUserId={currentUserId}
             />
           </main>
@@ -155,7 +146,7 @@ function App() {
               profilePicUrl={profilePicUrl}
             />
           )}
-          {isChatOpen && <ChatContainer isOpen={isChatOpen} />}
+          
           {isLoginOpen && (
             <LoginForm
               onClose={() => setLoginOpen(false)}

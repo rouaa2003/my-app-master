@@ -9,7 +9,7 @@ import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
 
-function ProductGrid({ isChatOpen, currentUserId }) {
+function ProductGrid({currentUserId }) {
   console.log("currentUserId", currentUserId);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -178,7 +178,7 @@ function ProductGrid({ isChatOpen, currentUserId }) {
     <div
       className="product-grid"
       id="product-grid"
-      style={{ width: isChatOpen ? "65%" : "100%" }}
+      
     >
       <div className="filters">
         <div className="filter">

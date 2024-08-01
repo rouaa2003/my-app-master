@@ -1,9 +1,9 @@
 import React from 'react';
 import './Header.css';
 
-function Header({ isChatOpen }) {
+function Header() {
   return (
-    <header id="header" style={{ width: isChatOpen ? '65%' : '100%' }}>
+    <header id="header" >
       <h1 className='h'>Welcome to the Blue Market</h1>
       <p className='h-p'>Buy and sell used products easily</p>
     </header>
