@@ -1,7 +1,16 @@
 header {
   margin-top:70px;
   text-align: center;
-  padding:20px;
+  padding:10px;
   background-color: #e0e0ff;
   color: #000080;
+}
+.h {
+  font-size: 4vw;
+  text-align: justify;
+  word-spacing: 3px;
+  letter-spacing: 1.5px;
+}
+.h-p{
+margin: 0px;
 }

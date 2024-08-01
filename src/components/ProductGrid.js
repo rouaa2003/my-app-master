@@ -1,40 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { getCategories, getCountries, getProducts } from "../api/apiService"; // Adjust the import path as needed
+import {
+  getCategories,
+  getCountries,
+  getProducts,
+  deleteProduct,
+} from "../api/apiService"; // Adjust the import path as needed
+import ChatWindow from "./ChatWindow";
+import ChatList from "./ChatList";
 import "./ProductGrid.css";
 
-const dummyProducts = [
-  {
-    name: "Product 1",
-    condition: "New",
-    status: "Available",
-    city: "Damascus",
-    categories: ["Clothes", "Electronics"],
-    seller: "John Doe",
-    image: "https://via.placeholder.com/250",
-  },
-  {
-    name: "Product 2",
-    condition: "Used",
-    status: "Sold",
-    city: "Aleppo",
-    categories: ["Furniture", "Appliances"],
-    seller: "Jane Doe",
-    image: "https://via.placeholder.com/250",
-  },
-];
-
-function ProductGrid({ isChatOpen }) {
+function ProductGrid({ isChatOpen, currentUserId }) {
+  console.log("currentUserId", currentUserId);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
+  const [activeChatSellerId, setActiveChatSellerId] = useState(null);
+  const [isChatListOpen, setIsChatListOpen] = useState(false);
+  const [imageIndices, setImageIndices] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleChatClick = (sellerId) => {
+    setActiveChatSellerId(sellerId);
+  };
+
+  const handleCloseChat = () => {
+    setActiveChatSellerId(null);
+  };
+
+  const toggleChatList = () => {
+    setIsChatListOpen(!isChatListOpen);
+    setActiveChatSellerId(null);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
         const [categoriesData, countriesData] = await Promise.all([
           getCategories(),
@@ -47,50 +52,58 @@ function ProductGrid({ isChatOpen }) {
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, []);
 
-  // TODO UNCOMMENT WHEN BACKEND HAS PRODUCT DATA
-
-  // useEffect(() => {
-  //   const fetchProductsData = async () => {
-  //     try {
-  //       const filters = {
-  //         categoryId:
-  //           selectedCategory === "All"
-  //             ? ""
-  //             : categories.find((cat) => cat.name === selectedCategory)?.id,
-  //         cityId:
-  //           selectedCity === ""
-  //             ? ""
-  //             : cities.find((city) => city.name === selectedCity)?.id,
-  //         countryId: selectedCountry,
-  //         textSearch: searchText,
-  //         status: 1, // Assuming you want to fetch available products
-  //         myProducts: false, // Adjust based on requirements
-  //       };
-  //       const productsData = await getProducts(filters);
-  //       setProducts(productsData);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     }
-  //   };
-
-  //   fetchProductsData();
-  // }, [
-  //   selectedCategory,
-  //   selectedCity,
-  //   selectedCountry,
-  //   searchText,
-  //   categories,
-  //   cities,
-  // ]);
-
-  // TODO remove dummydata when having live data
-  // Setting dummy products for now
   useEffect(() => {
-    setProducts(dummyProducts);
-  }, []);
+    const fetchProductsData = async () => {
+      try {
+        const filters = {
+          categoryId: selectedCategory || undefined,
+          cityId: selectedCity || undefined,
+          countryId: selectedCountry || undefined,
+          textSearch: searchText || undefined,
+          status: status || undefined,
+          myProducts: false,
+        };
+
+        Object.keys(filters).forEach(
+          (key) => filters[key] === undefined && delete filters[key]
+        );
+
+        const productsData = await getProducts(filters);
+
+        // Convert user IDs to strings for consistent comparison
+        const updatedProducts = productsData.map((product) => ({
+          ...product,
+          user: {
+            ...product.user,
+            id: String(product.user.id),
+          },
+        }));
+
+        setProducts(updatedProducts);
+
+        // Initialize image indices for products
+        const initialIndices = productsData.reduce((acc, product) => {
+          acc[product.id] = 0;
+          return acc;
+        }, {});
+        setImageIndices(initialIndices);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching data
+      }
+    };
+
+    fetchProductsData();
+  }, [selectedCategory, selectedCity, selectedCountry, searchText, status]);
+
+  useEffect(() => {
+    // Perform actions when currentUserId changes
+    // For example, re-fetch products if needed
+  }, [currentUserId]);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -99,12 +112,11 @@ function ProductGrid({ isChatOpen }) {
   const handleCountryChange = (event) => {
     const countryId = event.target.value;
     setSelectedCountry(countryId);
-
     const selectedCountryData = countries.find(
       (country) => country.id === parseInt(countryId)
     );
     setCities(selectedCountryData ? selectedCountryData.cities : []);
-    setSelectedCity(""); // Reset city selection when country changes
+    setSelectedCity("");
   };
 
   const handleCityChange = (event) => {
@@ -114,6 +126,53 @@ function ProductGrid({ isChatOpen }) {
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
+
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
+
+  const getImageUrl = (fileUrl) => {
+    if (!fileUrl) return null;
+    const encodedUrl = encodeURIComponent(fileUrl);
+    return `http://www.product.somee.com/api/Product/GetFile?url=${encodedUrl}`;
+  };
+
+  const handlePreviousImage = (productId) => {
+    setImageIndices((prevIndices) => ({
+      ...prevIndices,
+      [productId]:
+        (prevIndices[productId] -
+          1 +
+          products.find((p) => p.id === productId).files.length) %
+        products.find((p) => p.id === productId).files.length,
+    }));
+  };
+
+  const handleNextImage = (productId) => {
+    setImageIndices((prevIndices) => ({
+      ...prevIndices,
+      [productId]:
+        (prevIndices[productId] + 1) %
+        products.find((p) => p.id === productId).files.length,
+    }));
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      const success = await deleteProduct(productId);
+      if (success) {
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product.id !== productId)
+        );
+      } else {
+        alert("Failed to delete the product.");
+      }
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading products...</p>;
+  }
 
   return (
     <div
@@ -129,9 +188,9 @@ function ProductGrid({ isChatOpen }) {
             value={selectedCategory}
             onChange={handleCategoryChange}
           >
-            <option value="All">All</option>
+            <option value="">All Categories</option>
             {categories.map((category) => (
-              <option key={category.id} value={category.name}>
+              <option key={category.id} value={category.id}>
                 {category.name}
               </option>
             ))}
@@ -145,7 +204,7 @@ function ProductGrid({ isChatOpen }) {
             value={selectedCountry}
             onChange={handleCountryChange}
           >
-            <option value="">Select a Country</option>
+            <option value="">All Countries</option>
             {countries.map((country) => (
               <option key={country.id} value={country.id}>
                 {country.name}
@@ -162,12 +221,25 @@ function ProductGrid({ isChatOpen }) {
             onChange={handleCityChange}
             disabled={!selectedCountry}
           >
-            <option value="">Select a City</option>
+            <option value="">All Cities</option>
             {cities.map((city) => (
-              <option key={city.id} value={city.name}>
+              <option key={city.id} value={city.id}>
                 {city.name}
               </option>
             ))}
+          </select>
+        </div>
+
+        <div className="filter">
+          <label htmlFor="status-select">Status:</label>
+          <select
+            id="status-select"
+            value={status}
+            onChange={handleStatusChange}
+          >
+            <option value="">All Statuses</option>
+            <option value="1">Available</option>
+            <option value="0">Sold</option>
           </select>
         </div>
 
@@ -185,21 +257,75 @@ function ProductGrid({ isChatOpen }) {
 
       <div className="product-cards">
         {products.length > 0 ? (
-          products.map((product, index) => (
-            <div
-              className="product-card"
-              key={index}
-              data-seller={product.seller}
-            >
-              <img src={product.image} alt={product.name} />
+          products.map((product) => (
+            <div className="product-card" key={product.id}>
+              <div className="product-image">
+                {product.files && product.files.length > 0 ? (
+                  <>
+                    <img
+                      src={getImageUrl(
+                        product.files[imageIndices[product.id]].url
+                      )}
+                      alt={product.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "path/to/placeholder-image.jpg";
+                      }}
+                    />
+                    {product.files.length > 1 && (
+                      <>
+                        <button
+                          className="image-nav-button prev-button"
+                          onClick={() => handlePreviousImage(product.id)}
+                        >
+                          &#8249;
+                        </button>
+                        <button
+                          className="image-nav-button next-button"
+                          onClick={() => handleNextImage(product.id)}
+                        >
+                          &#8250;
+                        </button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <div className="placeholder-image">No Image</div>
+                )}
+              </div>
               <div className="product-details">
-                <h3>{product.name}</h3>
-                <p>Condition: {product.condition}</p>
-                <p>Status: {product.status}</p>
-                <p>City: {product.city}</p>
-                <p>Categories: {product.categories.join(", ")}</p>
-                <button className="chat-button">Chat with Seller</button>
-                <button className="sell-button">Mark as Sold</button>
+                <h3 className="product-title">{product.title}</h3>
+                <p className="product-price">${product.price}</p>
+                <p className="product-location">
+                  {product.city.name}, {product.city.country.name}
+                </p>
+                <p className="product-description">{product.description}</p>
+                <p className="product-status">
+                  {product.isAvailable ? "Available" : "Sold"}
+                </p>
+              </div>
+              <div className="product-actions">
+                <button
+                  className="chat-button"
+                  onClick={() => handleChatClick(product.user.id)}
+                >
+                  Message Seller
+                </button>
+                {console.log(typeof product.user.id, typeof currentUserId)},
+                {console.log(product.user.id === currentUserId)}
+                {String(product.user.id) === currentUserId && (
+                  <>
+                    {product.isAvailable && (
+                      <button className="sell-button">Mark as Sold</button>
+                    )}
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteProduct(product.id)}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))
@@ -207,6 +333,14 @@ function ProductGrid({ isChatOpen }) {
           <p>No products available</p>
         )}
       </div>
+      <button className="chat-list-toggle" onClick={toggleChatList}>
+        {isChatListOpen ? "Close Chat List" : "Open Chat List"}
+      </button>
+
+      {isChatListOpen && <ChatList onSelectChat={handleChatClick} />}
+      {activeChatSellerId && (
+        <ChatWindow sellerId={activeChatSellerId} onClose={handleCloseChat} />
+      )}
     </div>
   );
 }

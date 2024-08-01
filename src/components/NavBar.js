@@ -23,7 +23,7 @@ function NavBar({
 }) {
   return (
     <nav>
-      <h3 className="nav-p">Blue Market</h3>
+      <h1 className="nav-p">Blue Market</h1>
       <button
         className={`nav-button`}
         onClick={() =>
@@ -33,9 +33,6 @@ function NavBar({
         }
       >
         <FontAwesomeIcon icon={faHome} />
-      </button>
-      <button className={`nav-button`} onClick={() => onChatToggle("filter")}>
-        <FontAwesomeIcon icon={faFilter} />
       </button>
       
       <button

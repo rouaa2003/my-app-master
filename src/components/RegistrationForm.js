@@ -1,18 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useCountries } from "../assets/hooks/useCountries";
 import "./RegistrationForm.css";
 
 function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [cityId, setCityId] = useState(0);
-  const [error, setError] = useState(null);
+  const {
+    countries,
+    cities,
+    fetchCities,
+    loading,
+    error: fetchError,
+  } = useCountries();
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const registrationData = { email, phoneNumber, password, fullName, cityId };
+  const selectedCountryId = watch("country");
+
+  useEffect(() => {
+    if (selectedCountryId) {
+      fetchCities(selectedCountryId);
+    }
+  }, [selectedCountryId]);
+
+  const onSubmit = async (data) => {
+    const { email, phoneNumber, password, fullName, city } = data;
+
+    const registrationData = {
+      email,
+      phoneNumber,
+      password,
+      fullName,
+      cityId: parseInt(city),
+    };
 
     try {
       const response = await fetch(
@@ -30,65 +58,144 @@ function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const result = await response.json();
-      if (onRegisterSuccess) onRegisterSuccess();
+      setSuccessMessage(
+        "Registration successful! Redirecting to confirmation page..."
+      );
+
+      // Close the registration form
       if (onClose) onClose();
+
+      // Redirect to confirmation page after a short delay
+      setTimeout(() => {
+        navigate("/confirmation");
+        if (onRegisterSuccess) onRegisterSuccess();
+      }, 2000);
     } catch (error) {
-      setError(error.message);
+      setErrorMessage("Registration failed. Please try again.");
     }
   };
 
   return (
     <div className="registration-form-container">
-      <form id="registration-form" onSubmit={handleSubmit}>
+      <form id="registration-form" onSubmit={handleSubmit(onSubmit)}>
         <h2>Register</h2>
-        {error && <p className="error-message">{error}</p>}
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {fetchError && <p className="error-message">{fetchError}</p>}
+
+        <Controller
           name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Email is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="email">Email:</label>
+              <input type="email" id="email" {...field} />
+              {errors.email && (
+                <p className="error-message">{errors.email.message}</p>
+              )}
+            </>
+          )}
         />
-        <label htmlFor="phoneNumber">Phone Number:</label>
-        <input
-          type="text"
-          id="phoneNumber"
+
+        <Controller
           name="phoneNumber"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Phone number is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="phoneNumber">Phone Number:</label>
+              <input type="text" id="phoneNumber" {...field} />
+              {errors.phoneNumber && (
+                <p className="error-message">{errors.phoneNumber.message}</p>
+              )}
+            </>
+          )}
         />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
+
+        <Controller
           name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Password is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" {...field} />
+              {errors.password && (
+                <p className="error-message">{errors.password.message}</p>
+              )}
+            </>
+          )}
         />
-        <label htmlFor="fullName">Full Name:</label>
-        <input
-          type="text"
-          id="fullName"
+
+        <Controller
           name="fullName"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
+          control={control}
+          defaultValue=""
+          rules={{ required: "Full Name is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="fullName">Full Name:</label>
+              <input type="text" id="fullName" {...field} />
+              {errors.fullName && (
+                <p className="error-message">{errors.fullName.message}</p>
+              )}
+            </>
+          )}
         />
-        <label htmlFor="cityId">City ID:</label>
-        <input
-          type="number"
-          id="cityId"
-          name="cityId"
-          value={cityId}
-          onChange={(e) => setCityId(parseInt(e.target.value))}
-          required
+
+        <Controller
+          name="country"
+          control={control}
+          defaultValue=""
+          rules={{ required: "Country is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="country">Country:</label>
+              <select id="country" {...field}>
+                <option value="">Select a country</option>
+                {countries.map((country) => (
+                  <option key={country.id} value={country.id}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              {errors.country && (
+                <p className="error-message">{errors.country.message}</p>
+              )}
+            </>
+          )}
         />
-        <button type="submit">Register</button>
+
+        <Controller
+          name="city"
+          control={control}
+          defaultValue=""
+          rules={{ required: "City is required" }}
+          render={({ field }) => (
+            <>
+              <label htmlFor="city">City:</label>
+              <select id="city" {...field} disabled={!selectedCountryId}>
+                <option value="">Select a city</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+              {errors.city && (
+                <p className="error-message">{errors.city.message}</p>
+              )}
+            </>
+          )}
+        />
+
+        <button type="submit" disabled={loading}>
+          Register
+        </button>
         <button type="button" onClick={onClose}>
           Cancel
         </button>

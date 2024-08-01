@@ -1,0 +1,82 @@
+/* ConfirmationPage.css */
+
+.confirmation-page-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.confirmation-page-container h2 {
+  margin: 0 0 20px;
+  font-size: 24px;
+  color: #003366; /* Dark blue for headings */
+}
+
+.confirmation-page-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #003366; /* Dark blue for labels */
+}
+
+.confirmation-page-container input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #003366; /* Blue border for inputs */
+  border-radius: 4px;
+  font-size: 16px;
+  color: #003366;
+}
+
+.confirmation-page-container input:focus {
+  outline: none;
+  border-color: #0066cc; /* Lighter blue for focus */
+  box-shadow: 0 0 5px rgba(0, 102, 204, 0.2);
+}
+
+.confirmation-page-container button {
+  background-color: #0066cc; /* Blue background for buttons */
+  border: none;
+  color: #ffffff; /* White text */
+  padding: 10px 20px;
+  margin-right: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.confirmation-page-container button:hover {
+  background-color: #004d99; /* Darker blue for hover effect */
+}
+
+.confirmation-page-container .error-message,
+.confirmation-page-container .success-message {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.confirmation-page-container .error-message {
+  color: #cc0000; /* Red color for error messages */
+}
+
+.confirmation-page-container .success-message {
+  color: #009900; /* Green color for success messages */
+}
+
+.confirmation-page-container button[type="button"] {
+  background-color: #cccccc; /* Light grey for resend button */
+  margin-top: 15px;
+}
+
+.confirmation-page-container button[type="button"]:hover {
+  background-color: #999999; /* Darker grey for hover effect */
+}

@@ -1,14 +1,7 @@
 footer {
-  
-  padding: 10px;
-  background-color: #000080;
-  
-  z-index: 1;
-  
-}
-.p-footer{
-  color: white;
   text-align: center;
-  padding: 10px 0px;
-  margin-bottom: 0%;
+  padding: 15px;
+  background-color: #000080;
+  color: white;
+  z-index: 1;
 }

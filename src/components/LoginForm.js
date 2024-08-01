@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./LoginForm.css";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm({ onClose, onLoginSuccess, onSwitchToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Use useNavigate hook
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,15 +26,35 @@ function LoginForm({ onClose, onLoginSuccess, onSwitchToRegister }) {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.errorMessage || "An unknown error occurred";
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
-      localStorage.setItem("authToken", result.token);
-      if (onLoginSuccess) onLoginSuccess();
-      if (onClose) onClose();
+      console.log("res", result);
+      const token = result.data.token;
+      const userId = result.data.id;
+      const fullName = result.data.fullName;
+      const userName = result.data.userName;
+      const ProfilePic = result.data.imageUrl;
+
+      if (token) {
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("fullName", fullName);
+        localStorage.setItem("userName", userName);
+        localStorage.setItem("ProfilePic", ProfilePic);
+
+        if (onLoginSuccess) onLoginSuccess();
+        if (onClose) onClose();
+        navigate("/main"); // Navigate to main page after login
+      } else {
+        throw new Error("Token not found in the response");
+      }
     } catch (error) {
-      setError(error.message);
+      setError(error.message); // Set the error state to display the message
     }
   };
 

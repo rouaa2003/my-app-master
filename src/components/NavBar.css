@@ -9,13 +9,13 @@ nav {
   width: 100%;
   height: 50px;
   padding-left: 10px;
-  padding-top: 0%;
 }
 
 .nav-p {
-  font-size: 30px;
+  font-size: 35px;
   margin: 10px 25px 10px 0px;
-  color: #fff;
+  color: #ffffff;
+  text-wrap: nowrap;
 }
 
 .nav-button {
@@ -55,22 +55,7 @@ nav {
   outline: none;
 }
 
-.nav-search button[type="submit"] {
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  color: #000080;
-  background-color: #fff;
-  font-size: 20px;
-  border: 1px solid #ccc;
-  border-radius: 0 5px 5px 0;
 
-  margin-left: -1px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
 button:hover {
   background-color: rgb(255, 255, 255); /* Change button color on hover */
   color: #0000a0;
@@ -85,15 +70,15 @@ button:active {
   color: white;
   font-size: 27px;
   border: none;
-  width: 45px;
-  height: 45px;
+  width: 100%;
+  height: 40px;
   background-color: #000080;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-left: 225px;
+  margin: auto 10px;
 }
 
 .add-product-button i {

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './ChatContainer.css';
+import ChatWindow from "./ChatWindow";
+import ChatList from "./ChatList";
 
 function ChatContainer({ isOpen }) {
   const [activeChat, setActiveChat] = useState(null);

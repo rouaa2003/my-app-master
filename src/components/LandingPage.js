@@ -5,14 +5,17 @@ import "./LandingPage.css"; // Ensure you create and include this stylesheet
 import myImage from "../assets/image/_b711def7-f357-4078-b253-da9862828abd.jpg"; // Update the path to your image
 import LoginForm from "./LoginForm";
 import RegistrationForm from "./RegistrationForm";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = ({ onSignIn, onVisitAsGuest }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = () => {
     setShowForm(true);
     setIsLoggingIn(true);
+    navigate("");
   };
 
   const handleSignUp = () => {
@@ -60,10 +63,7 @@ const LandingPage = ({ onSignIn, onVisitAsGuest }) => {
             </div>
           </div>
           <div className="right">
-            <img
-              src={myImage}
-              alt="A photo for people exchanging their materials"
-            />
+            <img src={myImage} alt="people exchanging their materials" />
           </div>
         </div>
       </div>
