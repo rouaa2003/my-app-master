@@ -5,3 +5,10 @@ footer {
   color: white;
   z-index: 1;
 }
+.f-p{
+  text-align: center;
+  background-color: #000080;
+  color: white;
+  z-index: 1;
+  margin-bottom: 0px;
+}

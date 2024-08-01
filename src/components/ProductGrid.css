@@ -1,3 +1,4 @@
+/* القواعد الموجودة */
 .product-grid {
   display: flex;
   flex-direction: column;
@@ -13,7 +14,6 @@
   flex-wrap: wrap;
   gap: 20px;
   margin-bottom: 20px;
-  
 }
 
 .filter {
@@ -129,6 +129,7 @@
 .sell-button:hover {
   opacity: 0.9;
 }
+
 .delete-button {
   background-color: #ff4c4c; /* Bright red color to indicate danger */
   color: white;
@@ -143,4 +144,45 @@
 .delete-button:hover {
   background-color: #ff1a1a; /* Darker red on hover */
   opacity: 0.9;
+}
+
+/* القواعد الجديدة لإدارة عرض قائمة المحادثات */
+.product-grid-container {
+  display: flex;
+  width: 100%;
+  transition: width 0.3s;
+}
+
+.product-grid.shrink {
+  width: 65%; /* تقليص عرض المنتج إلى 65% */
+}
+
+.chat-list-container {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s;
+}
+
+.chat-list-container.open {
+  width: 35%; /* عرض قائمة المحادثات 35% */
+}
+
+.chat-list-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #000080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  margin-bottom: 4rem;
+}
+
+.chat-list-toggle:hover {
+  opacity: 1;
 }
