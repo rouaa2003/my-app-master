@@ -186,3 +186,10 @@
 .chat-list-toggle:hover {
   opacity: 1;
 }
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw;
+}
