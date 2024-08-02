@@ -97,7 +97,14 @@ function ProductGrid({ currentUserId }) {
     };
 
     fetchProductsData();
-  }, [selectedCategory, selectedCity, selectedCountry, searchText, status]);
+  }, [
+    selectedCategory,
+    selectedCity,
+    selectedCountry,
+    searchText,
+    status,
+    products,
+  ]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
