@@ -1,16 +1,24 @@
 header {
-  margin-top:70px;
-  text-align: center;
-  padding:10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px; /* Ensure it appears below the navbar */
+  padding: 10px;
   background-color: #e0e0ff;
   color: #000080;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 5;
 }
+
 .h {
-  font-size: 4vw;
-  text-align: justify;
+  font-size: 3vw;
+  text-align: center;
   word-spacing: 3px;
   letter-spacing: 1.5px;
 }
-.h-p{
-margin: 0px;
+
+.h-p {
+  text-align: center;
+  margin: 0px;
 }
