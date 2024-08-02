@@ -257,9 +257,8 @@ function ProductGrid({ currentUserId }) {
                           product.files[imageIndices[product.id]].url
                         )}
                         alt={product.title}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "path/to/placeholder-image.jpg";
+                        onError={(error) => {
+                          console.log("error", error);
                         }}
                       />
                       {product.files.length > 1 && (
@@ -289,9 +288,7 @@ function ProductGrid({ currentUserId }) {
                   <p className="product-location">
                     {product.city.name}, {product.city.country.name}
                   </p>
-                  <p className="product-description">
-                    {product.description}
-                  </p>
+                  <p className="product-description">{product.description}</p>
                   <p className="product-status">
                     {product.isAvailable ? "Available" : "Sold"}
                   </p>
