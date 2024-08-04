@@ -149,7 +149,7 @@ function ChatWindow({ sellerId, onClose }) {
               key={message.id}
               className={`message ${message.isSendByMe ? "user" : "seller"}`}
             >
-              <p>{message.text}</p>
+              <p style={{ fontSize: 18 }}>{message.text}</p>
               {message.fileUrl && (
                 <img
                   src={message.fileUrl}
@@ -169,13 +169,6 @@ function ChatWindow({ sellerId, onClose }) {
             type="text"
             placeholder="Type a message..."
             disabled={isLoading}
-          />
-          <input
-            {...register("file")}
-            type="file"
-            ref={fileInputRef}
-            disabled={isLoading}
-            accept=".png"
           />
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Sending..." : "Send"}
