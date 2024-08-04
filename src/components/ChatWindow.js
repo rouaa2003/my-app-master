@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { fetchWithAuth } from "../api/fetchWithAuth";
 import "./ChatWindow.css";
 
 function ChatWindow({ sellerId, onClose }) {
