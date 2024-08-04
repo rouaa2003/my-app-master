@@ -3,6 +3,7 @@ export const fetchWithAuth = async (url, options = {}) => {
   const headers = {
     ...options.headers,
     Authorization: token,
+    "Content-Type": "application/json", // Set content type for POST/PUT requests
   };
 
   try {
@@ -10,7 +11,10 @@ export const fetchWithAuth = async (url, options = {}) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return response;
+
+    // Assuming the response is JSON; adjust if needed
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Fetch error:", error);
     throw error;

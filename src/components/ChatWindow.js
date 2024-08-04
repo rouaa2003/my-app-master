@@ -6,15 +6,25 @@ import "./ChatWindow.css";
 function ChatWindow({ sellerId, onClose }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const { register, handleSubmit, reset } = useForm();
+  const token = localStorage.getItem("authToken");
 
   const fetchChatHistory = useCallback(async () => {
     try {
-      const response = await fetchWithAuth(
+      const response = await fetch(
         `http://www.product.somee.com/api/Chat/GetChatWithUser?userId=${sellerId}`,
-        { method: "GET" }
+
+        {
+          method: "GET",
+          headers: {
+            Authorization: token,
+          },
+        }
       );
 
       const data = await response.json();
@@ -26,6 +36,9 @@ function ChatWindow({ sellerId, onClose }) {
             (newMsg) =>
               !prevMessages.some((prevMsg) => prevMsg.id === newMsg.id)
           );
+
+          if (newMessages.length > 0) setHasNewMessage(true);
+
           return [...prevMessages, ...newMessages].sort(
             (a, b) => new Date(a.sendDate) - new Date(b.sendDate)
           );
@@ -45,8 +58,10 @@ function ChatWindow({ sellerId, onClose }) {
   }, [fetchChatHistory]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (!isMinimized) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isMinimized]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -59,11 +74,15 @@ function ChatWindow({ sellerId, onClose }) {
         sendFormData.append("file", formData.file[0]);
       }
 
-      const response = await fetchWithAuth(
-        "http://www.product.somee.com/api/Chat/SendMessage",
+      const response = await fetch(
+        `http://www.product.somee.com/api/Chat/SendMessage`,
         {
           method: "POST",
           body: sendFormData,
+
+          headers: {
+            Authorization: token,
+          },
         }
       );
 
@@ -97,13 +116,24 @@ function ChatWindow({ sellerId, onClose }) {
     }
   };
 
+  const handleMinimize = () => {
+    setIsMinimized(!isMinimized);
+    if (isMinimized) setHasNewMessage(false); // Reset notification when expanding
+  };
+
   return (
-    <div className="chat-window">
+    <div className={`chat-window ${isMinimized ? "minimized" : ""}`}>
       <div className="chat-header">
-        <h3>Chat with Seller</h3>
+        <h3>{isMinimized ? "Chat" : "Chat with Seller"}</h3>
+        <button onClick={handleMinimize}>
+          {isMinimized ? "Expand" : "Minimize"}
+        </button>
         <button onClick={onClose}>Close</button>
       </div>
-      <div className="chat-messages">
+      {!isMinimized && hasNewMessage && (
+        <div className="notification-banner">New message received!</div>
+      )}
+      <div className={`chat-messages ${isMinimized ? "hidden" : ""}`}>
         {messages.length === 0 ? (
           <p>No messages yet.</p>
         ) : (
@@ -125,24 +155,26 @@ function ChatWindow({ sellerId, onClose }) {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="chat-input">
-        <input
-          {...register("message", { required: true })}
-          type="text"
-          placeholder="Type a message..."
-          disabled={isLoading}
-        />
-        <input
-          {...register("file")}
-          type="file"
-          ref={fileInputRef}
-          disabled={isLoading}
-          accept=".png"
-        />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Sending..." : "Send"}
-        </button>
-      </form>
+      {!isMinimized && (
+        <form onSubmit={handleSubmit(onSubmit)} className="chat-input">
+          <input
+            {...register("message", { required: true })}
+            type="text"
+            placeholder="Type a message..."
+            disabled={isLoading}
+          />
+          <input
+            {...register("file")}
+            type="file"
+            ref={fileInputRef}
+            disabled={isLoading}
+            accept=".png"
+          />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send"}
+          </button>
+        </form>
+      )}
     </div>
   );
 }

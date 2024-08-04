@@ -11,6 +11,12 @@
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
+  transition: width 0.3s, height 0.3s;
+}
+
+.chat-window.minimized {
+  width: 300px;
+  height: 50px; /* Reduced height when minimized */
 }
 
 .chat-header {
@@ -38,6 +44,18 @@
   overflow-y: auto;
   padding: 10px;
   height: 300px; /* Adjust as needed */
+}
+
+.chat-messages.hidden {
+  display: none;
+}
+
+.notification-banner {
+  background-color: #ff9800; /* Orange */
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .message {
