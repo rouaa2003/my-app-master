@@ -5,11 +5,14 @@ export const fetchWithAuth = async (url, options = {}) => {
     Authorization: token,
   };
 
-  const response = await fetch(url, { ...options, headers });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+  try {
+    const response = await fetch(url, { ...options, headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
   }
-
-  return response.json();
 };
