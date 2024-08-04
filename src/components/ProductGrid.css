@@ -240,3 +240,33 @@
 .filter-toggle.active {
   transform: translateY(0); /* Remove vertical shift when active */
 }
+/* Add these classes for rating color coding */
+.seller-rating {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.rating-very-poor {
+  color: #ff4c4c; /* Red */
+}
+
+.rating-poor {
+  color: #ff6f6f; /* Light Red */
+}
+
+.rating-fair {
+  color: #f2b632; /* Yellow */
+}
+
+.rating-good {
+  color: #4caf50; /* Green */
+}
+
+.rating-excellent {
+  color: #388e3c; /* Dark Green */
+}
+
+/* Optional: To ensure proper spacing or formatting */
+.product-description {
+  margin-bottom: 10px;
+}
