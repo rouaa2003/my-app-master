@@ -11,14 +11,14 @@
 
 .filters {
   position: fixed;
-  top: 140px; /* Adjusted to fit below the header */
+  top: 180px; /* Adjusted to fit below the header */
   left: 0;
   right: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 10px 20px;
-  background-color: white;
+  background-color: rgb(0, 0, 128);
   z-index: 5;
   border-bottom: 1px solid #ccc;
 }
