@@ -1,26 +1,46 @@
+.product-grid-container {
+  display: flex;
+  width: 100%;
+  transition: width 0.3s;
+  position: relative;
+}
+/* Styling for the product grid */
 .product-grid {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 0 30px 30px 30px; /* Adjust padding to avoid overlap with header and filters */
-  margin-top: 210px; /* Ensure it appears below the filters */
+  padding: 0 30px 30px 30px;
+  margin-top: 200px; /* Adjusted to account for filters and toggle button */
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  transition: margin-top 0.3s ease-in-out;
+}
+
+.product-grid:not(.filters-visible) {
+  margin-top: 80px; /* Reduced top margin when filters are hidden */
 }
 
 .filters {
   position: fixed;
-  top: 180px; /* Adjusted to fit below the header */
+  top: 165px; /* Positioned below the filter toggle button */
   left: 0;
   right: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 10px 20px;
+  padding: 20px;
   background-color: rgb(0, 0, 128);
   z-index: 5;
   border-bottom: 1px solid #ccc;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.filters:not(.visible) {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 .filter {
@@ -155,12 +175,6 @@
   opacity: 0.9;
 }
 
-.product-grid-container {
-  display: flex;
-  width: 100%;
-  transition: width 0.3s;
-}
-
 .product-grid.shrink {
   width: 65%; /* Shrink product grid width to 65% */
 }
@@ -200,4 +214,29 @@
   align-items: center;
   height: 100vh; /* Full height of the viewport */
   width: 100vw;
+}
+.filter-toggle {
+  position: fixed;
+  top: 125px; /* Positioned below the header */
+  right: 20px;
+  z-index: 1000;
+  background-color: #000080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+}
+
+.filter-toggle:hover {
+  background-color: #c0c0e8;
+}
+
+.filter-toggle.active {
+  transform: translateY(0); /* Remove vertical shift when active */
 }
