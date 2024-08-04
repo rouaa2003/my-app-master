@@ -6,6 +6,7 @@ import {
   deleteProduct,
 } from "../api/apiService";
 import { Atom } from "react-loading-indicators";
+import { Filter } from "lucide-react";
 import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
@@ -24,6 +25,11 @@ function ProductGrid({ currentUserId }) {
   const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+
+  const toggleFilters = () => {
+    setIsFiltersVisible(!isFiltersVisible);
+  };
 
   const handleChatClick = (sellerId) => {
     setActiveChatSellerId(sellerId);
@@ -191,8 +197,19 @@ function ProductGrid({ currentUserId }) {
 
   return (
     <div className="product-grid-container">
-      <div className={`product-grid ${isChatListOpen ? "shrink" : ""}`}>
-        <div className="filters">
+      <button
+        className={`filter-toggle ${isFiltersVisible ? "active" : ""}`}
+        onClick={toggleFilters}
+      >
+        <Filter size={18} />
+        {isFiltersVisible ? "Hide Filters" : "Show Filters"}
+      </button>
+      <div
+        className={`product-grid ${isChatListOpen ? "shrink" : ""} ${
+          isFiltersVisible ? "filters-visible" : ""
+        }`}
+      >
+        <div className={`filters ${isFiltersVisible ? "visible" : ""}`}>
           <div className="filter">
             <label htmlFor="category-select">Category</label>
             <select
