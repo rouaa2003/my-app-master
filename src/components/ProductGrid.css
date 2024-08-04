@@ -1,19 +1,26 @@
-/* القواعد الموجودة */
 .product-grid {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 30px;
+  padding: 0 30px 30px 30px; /* Adjust padding to avoid overlap with header and filters */
+  margin-top: 210px; /* Ensure it appears below the filters */
   width: 100%;
   overflow-x: auto;
-  padding-top: 20px;
+  overflow-y: hidden;
 }
 
 .filters {
+  position: fixed;
+  top: 180px; /* Adjusted to fit below the header */
+  left: 0;
+  right: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: rgb(0, 0, 128);
+  z-index: 5;
+  border-bottom: 1px solid #ccc;
 }
 
 .filter {
@@ -40,6 +47,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 30px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-top: 150px; /* Adjust padding to avoid overlap with fixed filters */
 }
 
 .product-card {
@@ -131,7 +140,7 @@
 }
 
 .delete-button {
-  background-color: #ff4c4c; /* Bright red color to indicate danger */
+  background-color: #ff4c4c;
   color: white;
   border: none;
   border-radius: 5px;
@@ -142,11 +151,10 @@
 }
 
 .delete-button:hover {
-  background-color: #ff1a1a; /* Darker red on hover */
+  background-color: #ff1a1a;
   opacity: 0.9;
 }
 
-/* القواعد الجديدة لإدارة عرض قائمة المحادثات */
 .product-grid-container {
   display: flex;
   width: 100%;
@@ -154,7 +162,7 @@
 }
 
 .product-grid.shrink {
-  width: 65%; /* تقليص عرض المنتج إلى 65% */
+  width: 65%; /* Shrink product grid width to 65% */
 }
 
 .chat-list-container {
@@ -164,7 +172,7 @@
 }
 
 .chat-list-container.open {
-  width: 35%; /* عرض قائمة المحادثات 35% */
+  width: 35%; /* Set chat list container width to 35% */
 }
 
 .chat-list-toggle {
@@ -185,4 +193,11 @@
 
 .chat-list-toggle:hover {
   opacity: 1;
+}
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw;
 }

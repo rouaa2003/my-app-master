@@ -104,9 +104,8 @@ function AddProductForm({ onClose, onSuccess }) {
         // Call onSuccess prop or onClose
         if (onSuccess) {
           onSuccess();
-        } else {
-          onClose();
         }
+        onClose();
       } else {
         const errorText = await response.text();
         throw new Error(

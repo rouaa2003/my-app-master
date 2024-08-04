@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   getCategories,
   getCountries,
   getProducts,
   deleteProduct,
-} from "../api/apiService"; // Adjust the import path as needed
+} from "../api/apiService";
+import { Atom } from "react-loading-indicators";
 import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
@@ -37,6 +38,15 @@ function ProductGrid({ currentUserId }) {
     setActiveChatSellerId(null);
   };
 
+  // useEffect(() => {
+  //   // Simulate an API call
+  //   setTimeout(() => {
+  //     // Fetch products from API and set state
+  //     setProducts([]); // Replace with actual data fetching
+  //     setIsLoading(false);
+  //   }, 2000); // Simulate loading time
+  // }, []);
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -54,50 +64,49 @@ function ProductGrid({ currentUserId }) {
     fetchInitialData();
   }, []);
 
-  useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const filters = {
-          categoryId: selectedCategory || undefined,
-          cityId: selectedCity || undefined,
-          countryId: selectedCountry || undefined,
-          textSearch: searchText || undefined,
-          status: status || undefined,
-          myProducts: false,
-        };
+  const fetchProductsData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const filters = {
+        categoryId: selectedCategory || undefined,
+        cityId: selectedCity || undefined,
+        countryId: selectedCountry || undefined,
+        textSearch: searchText || undefined,
+        status: status || undefined,
+        myProducts: false,
+      };
 
-        Object.keys(filters).forEach(
-          (key) => filters[key] === undefined && delete filters[key]
-        );
+      Object.keys(filters).forEach(
+        (key) => filters[key] === undefined && delete filters[key]
+      );
 
-        const productsData = await getProducts(filters);
+      const productsData = await getProducts(filters);
 
-        // Convert user IDs to strings for consistent comparison
-        const updatedProducts = productsData.map((product) => ({
-          ...product,
-          user: {
-            ...product.user,
-            id: String(product.user.id),
-          },
-        }));
+      const updatedProducts = productsData.map((product) => ({
+        ...product,
+        user: {
+          ...product.user,
+          id: String(product.user.id),
+        },
+      }));
 
-        setProducts(updatedProducts);
+      setProducts(updatedProducts);
 
-        // Initialize image indices for products
-        const initialIndices = productsData.reduce((acc, product) => {
-          acc[product.id] = 0;
-          return acc;
-        }, {});
-        setImageIndices(initialIndices);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false); // Set loading to false after fetching data
-      }
-    };
-
-    fetchProductsData();
+      const initialIndices = productsData.reduce((acc, product) => {
+        acc[product.id] = 0;
+        return acc;
+      }, {});
+      setImageIndices(initialIndices);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [selectedCategory, selectedCity, selectedCountry, searchText, status]);
+
+  useEffect(() => {
+    fetchProductsData();
+  }, [fetchProductsData]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
@@ -168,7 +177,16 @@ function ProductGrid({ currentUserId }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-indicator">
+        <Atom
+          color="#314acc"
+          size="large"
+          text="loading products"
+          textColor=""
+        />
+      </div>
+    );
   }
 
   return (
