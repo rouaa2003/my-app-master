@@ -121,6 +121,10 @@ function ChatWindow({ sellerId, onClose }) {
     if (isMinimized) setHasNewMessage(false); // Reset notification when expanding
   };
 
+  const handleNotificationClick = () => {
+    setHasNewMessage(false); // Reset notification when clicked
+  };
+
   return (
     <div className={`chat-window ${isMinimized ? "minimized" : ""}`}>
       <div className="chat-header">
@@ -131,7 +135,10 @@ function ChatWindow({ sellerId, onClose }) {
         <button onClick={onClose}>Close</button>
       </div>
       {!isMinimized && hasNewMessage && (
-        <div className="notification-banner">New message received!</div>
+        <div
+          className="notification-banner"
+          onClick={handleNotificationClick}
+        />
       )}
       <div className={`chat-messages ${isMinimized ? "hidden" : ""}`}>
         {messages.length === 0 ? (
