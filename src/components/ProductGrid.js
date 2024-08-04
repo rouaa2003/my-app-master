@@ -181,6 +181,13 @@ function ProductGrid({ currentUserId }) {
       console.error("Error deleting product:", error);
     }
   };
+  const getRatingInfo = (rating) => {
+    if (rating >= 90) return { class: "rating-excellent", phrase: "Excellent" };
+    if (rating >= 70) return { class: "rating-good", phrase: "Good" };
+    if (rating >= 50) return { class: "rating-fair", phrase: "Fair" };
+    if (rating >= 30) return { class: "rating-poor", phrase: "Poor" };
+    return { class: "rating-very-poor", phrase: "Very Poor" };
+  };
 
   if (isLoading) {
     return (
@@ -326,6 +333,13 @@ function ProductGrid({ currentUserId }) {
                   <p className="product-description">{product.description}</p>
                   <p className="product-status">
                     {product.isAvailable ? "Available" : "Sold"}
+                  </p>
+                  <p
+                    className={`seller-rating ${
+                      getRatingInfo(product.user.rating).class
+                    }`}
+                  >
+                    Seller Rating: {getRatingInfo(product.user.rating).phrase}
                   </p>
                 </div>
                 <div className="product-actions">
