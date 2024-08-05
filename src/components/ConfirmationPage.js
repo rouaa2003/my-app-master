@@ -34,7 +34,10 @@ const ConfirmationPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.errorMessage || "An unknown error occurred";
+        throw new Error(errorMessage);
       }
 
       setSuccessMessage(
@@ -64,11 +67,15 @@ const ConfirmationPage = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.errorMessage || "An unknown error occurred";
+        throw new Error(errorMessage);
       }
 
       setSuccessMessage("Confirmation email resent successfully.");
     } catch (error) {
+      console.log("error", error);
       setErrorMessage(error.message);
     }
   };
@@ -89,6 +96,7 @@ const ConfirmationPage = () => {
         <h2>Confirm Your Account</h2>
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="email"
