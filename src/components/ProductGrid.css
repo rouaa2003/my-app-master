@@ -270,3 +270,20 @@
 .product-description {
   margin-bottom: 10px;
 }
+.sign-in-message {
+  font-size: 1.2em;
+  color: #314acc; /* Blue theme color */
+  text-align: center;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #eef3ff; /* Light blue background */
+  border: 1px dashed #314acc; /* Dashed border */
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sign-in-message:hover {
+  background-color: #d8e2ff; /* Slightly darker blue on hover */
+  color: #1a3d9f; /* Darker blue text on hover */
+  cursor: pointer;
+}

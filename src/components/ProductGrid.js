@@ -11,7 +11,7 @@ import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
 
-function ProductGrid({ currentUserId }) {
+function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -64,6 +64,7 @@ function ProductGrid({ currentUserId }) {
     };
 
     fetchInitialData();
+    console.log(isGuest, "isGuest");
   }, []);
 
   const fetchProductsData = useCallback(async () => {
@@ -340,27 +341,38 @@ function ProductGrid({ currentUserId }) {
                   </p>
                 </div>
                 <div className="product-actions">
-                  {String(product.user.id) === String(currentUserId) ? (
-                    <>
-                      {product.isAvailable && (
-                        <button className="sell-button">Mark as Sold</button>
-                      )}
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDeleteProduct(product.id)}
-                      >
-                        Delete
-                      </button>
-                    </>
+                  {isGuest ? (
+                    <p className="sign-in-message">Sign in to buy and sell</p>
                   ) : (
-                    <button
-                      className="chat-button"
-                      onClick={() =>
-                        handleChatClick(product.user.id, product.user.fullName)
-                      }
-                    >
-                      Message {product.user.fullName}
-                    </button>
+                    <>
+                      {String(product.user.id) === String(currentUserId) ? (
+                        <>
+                          {product.isAvailable && (
+                            <button className="sell-button">
+                              Mark as Sold
+                            </button>
+                          )}
+                          <button
+                            className="delete-button"
+                            onClick={() => handleDeleteProduct(product.id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="chat-button"
+                          onClick={() =>
+                            handleChatClick(
+                              product.user.id,
+                              product.user.fullName
+                            )
+                          }
+                        >
+                          Message {product.user.fullName}
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

@@ -16,10 +16,12 @@ import "./App.css";
 function App() {
   const [isAddProductOpen, setAddProductOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
-  
+
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+
   const [currentUserId, setUserId] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -48,6 +50,7 @@ function App() {
   useEffect(() => {
     checkAuthentication(); // Check authentication status on mount
     setUserProfile();
+    console.log("isGuest", isGuest, "isAuthenticated", isAuthenticated);
   }, []);
 
   const handleSignIn = () => {
@@ -55,13 +58,15 @@ function App() {
   };
 
   const handleVisitAsGuest = () => {
-    setIsAuthenticated(true); // Allow guest access
+    console.log("visitAsGuest");
+    setIsGuest(true);
+    setIsAuthenticated(false); // Allow guest access
   };
 
   const handleAddProductClick = () => {
     setAddProductOpen(true);
     setProfileOpen(false);
-    
+
     setLoginOpen(false);
     setRegisterOpen(false);
   };
@@ -69,7 +74,7 @@ function App() {
   const handleProfileClick = () => {
     setProfileOpen(true);
     setAddProductOpen(false);
-    
+
     setLoginOpen(false);
     setRegisterOpen(false);
   };
@@ -78,12 +83,13 @@ function App() {
     setLoginOpen(true);
     setAddProductOpen(false);
     setProfileOpen(false);
-    
+    setIsAuthenticated(false);
     setRegisterOpen(false);
   };
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
+    setIsGuest(false);
     navigate("/main");
   };
 
@@ -91,7 +97,7 @@ function App() {
     setRegisterOpen(true);
     setAddProductOpen(false);
     setProfileOpen(false);
-    
+
     setLoginOpen(false);
   };
 
@@ -103,19 +109,20 @@ function App() {
   const handleLogout = () => {
     localStorage.clear();
     setIsAuthenticated(false);
+
     navigate("/landingPage"); // Navigate to landing page or login page
     window.location.reload();
   };
 
   return (
     <div className="App">
-      {isAuthenticated ? (
+      {isAuthenticated || isGuest ? (
         <>
           <NavBar
             isAuthenticated={isAuthenticated}
+            isGuest={isGuest}
             onAddProductClick={handleAddProductClick}
             onProfileClick={handleProfileClick}
-            
             onLoginClick={handleLoginClick}
             onRegisterClick={handleRegisterClick}
             onLogout={handleLogout}
@@ -124,6 +131,8 @@ function App() {
           <main>
             <ProductGrid
               currentUserId={currentUserId}
+              isGuest={isGuest}
+              isAuthenticated
             />
           </main>
           <Footer />
@@ -146,11 +155,11 @@ function App() {
               profilePicUrl={profilePicUrl}
             />
           )}
-          
+
           {isLoginOpen && (
             <LoginForm
               onClose={() => setLoginOpen(false)}
-              onLoginSuccess={checkAuthentication}
+              onLoginSuccess={handleLoginSuccess}
             />
           )}
           {isRegisterOpen && (
@@ -181,7 +190,11 @@ function App() {
 
         <Route
           path="*"
-          element={<Navigate to={isAuthenticated ? "/main" : "/landingPage"} />}
+          element={
+            <Navigate
+              to={isAuthenticated || isGuest ? "/main" : "/landingPage"}
+            />
+          }
         />
       </Routes>
     </div>
