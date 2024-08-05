@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Header from "./components/Header";
@@ -16,47 +16,46 @@ import "./App.css";
 function App() {
   const [isAddProductOpen, setAddProductOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
-
+  const [authStateChange, setAuthStateChange] = useState(0);
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
 
-  const [currentUserId, setUserId] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  
+  const [currentUserId, setcurrentUserId] = useState("");
+  const [authToken, setauthToken] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {}, [isAuthenticated, isGuest]);
 
   // Function to check if the user is authenticated
   const checkAuthentication = () => {
     const token = localStorage.getItem("authToken");
-    setIsAuthenticated(!!token);
-  };
+    const userId = localStorage.getItem("userId");
+    const newAuthState = !!token;
 
-  const setUserProfile = () => {
-    setUserId(localStorage.getItem("userId"));
-    setFullName(localStorage.getItem("fullName"));
-    setEmailAddress(localStorage.getItem("userName"));
-    setUserId(localStorage.getItem("userId"));
-    
+    setauthToken(token);
+    setcurrentUserId(userId);
+    console.log("Checking authentication. Token exists:", newAuthState);
+    setIsAuthenticated(newAuthState);
   };
-
-  useEffect(() => {
-    checkAuthentication(); // Check authentication status on mount
-    setUserProfile();
-    console.log("isGuest", isGuest, "isAuthenticated", isAuthenticated);
-  }, []);
 
   const handleSignIn = () => {
+    console.log("handleSignIn called");
     checkAuthentication();
   };
 
   const handleVisitAsGuest = () => {
-    console.log("visitAsGuest");
     setIsGuest(true);
-    setIsAuthenticated(false); // Allow guest access
+    setIsAuthenticated(false);
+    setAuthStateChange((prev) => {
+      console.log(
+        "Updating authStateChange in handleVisitAsGuest. New value:",
+        prev + 1
+      );
+      return prev + 1;
+    });
   };
 
   const handleAddProductClick = () => {
@@ -83,11 +82,12 @@ function App() {
     setRegisterOpen(false);
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = useCallback(() => {
     setIsAuthenticated(true);
     setIsGuest(false);
+    setAuthStateChange((prev) => prev + 1);
     navigate("/main");
-  };
+  });
 
   const handleRegisterClick = () => {
     setRegisterOpen(true);
@@ -110,6 +110,15 @@ function App() {
     window.location.reload();
   };
 
+  const handleSuccessRefetch = () => {
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    console.log("App useEffect triggered. AuthStateChange:", authStateChange);
+    checkAuthentication();
+  }, [authStateChange, handleLoginSuccess]);
+
   return (
     <div className="App">
       {isAuthenticated || isGuest ? (
@@ -122,13 +131,16 @@ function App() {
             onLoginClick={handleLoginClick}
             onRegisterClick={handleRegisterClick}
             onLogout={handleLogout}
+            handleLoginSuccess={handleLoginSuccess}
           />
           <Header />
           <main>
             <ProductGrid
               currentUserId={currentUserId}
               isGuest={isGuest}
-              isAuthenticated
+              isAuthenticated={isAuthenticated}
+              authStateChange={authStateChange}
+              onLoginSuccess={handleSuccessRefetch}
             />
           </main>
           <Footer />
@@ -146,9 +158,7 @@ function App() {
             <ProfileModal
               onClose={() => setProfileOpen(false)}
               currentUserId={currentUserId}
-              fullName={fullName}
-              emailAddress={emailAddress}
-            
+              authToken={authToken}
             />
           )}
 

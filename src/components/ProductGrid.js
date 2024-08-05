@@ -11,7 +11,13 @@ import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
 
-function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
+function ProductGrid({
+  currentUserId,
+  isGuest,
+  isAuthenticated,
+  authStateChange,
+  onLoginSuccess,
+}) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -64,7 +70,6 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     };
 
     fetchInitialData();
-    console.log(isGuest, "isGuest");
   }, []);
 
   const fetchProductsData = useCallback(async () => {
@@ -109,7 +114,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
 
   useEffect(() => {
     fetchProductsData();
-  }, [fetchProductsData]);
+  }, [authStateChange]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
@@ -341,6 +346,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
                   </p>
                 </div>
                 <div className="product-actions">
+                  {console.log("isGuestisGuestisGuestisGuest", isGuest)}
                   {isGuest ? (
                     <p className="sign-in-message">Sign in to buy and sell</p>
                   ) : (
