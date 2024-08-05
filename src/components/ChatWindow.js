@@ -1,107 +1,179 @@
-import React, { useState, useEffect, useRef } from "react";
-import { fetchWithAuth } from "../api/fetchWithAuth";
-
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useForm } from "react-hook-form";
 import "./ChatWindow.css";
 
-function ChatWindow({ sellerId, onClose }) {
+function ChatWindow({ sellerId, onClose, sellerName }) {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
   const fileInputRef = useRef(null);
-  useEffect(() => {
-    fetchChatHistory();
-  }, [sellerId]);
+  const messagesEndRef = useRef(null);
+  const { register, handleSubmit, reset } = useForm();
+  const token = localStorage.getItem("authToken");
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const fetchChatHistory = async () => {
+  const fetchChatHistory = useCallback(async () => {
     try {
-      const response = await fetchWithAuth(
+      const response = await fetch(
         `http://www.product.somee.com/api/Chat/GetChatWithUser?userId=${sellerId}`,
+
         {
           method: "GET",
+          headers: {
+            Authorization: token,
+          },
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch chat history");
-      }
-
       const data = await response.json();
-      setMessages(data.messages || []);
+      console.log("Fetched chat data:", data);
+
+      if (data && Array.isArray(data.data)) {
+        setMessages((prevMessages) => {
+          const newMessages = data.data.filter(
+            (newMsg) =>
+              !prevMessages.some((prevMsg) => prevMsg.id === newMsg.id)
+          );
+
+          if (newMessages.length > 0) setHasNewMessage(true);
+
+          return [...prevMessages, ...newMessages].sort(
+            (a, b) => new Date(a.sendDate) - new Date(b.sendDate)
+          );
+        });
+      } else {
+        console.error("Unexpected data structure:", data);
+      }
     } catch (error) {
       console.error("Error fetching chat history:", error);
     }
-  };
+  }, [sellerId]);
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim()) return;
+  useEffect(() => {
+    fetchChatHistory();
+    const intervalId = setInterval(fetchChatHistory, 5000);
+    return () => clearInterval(intervalId);
+  }, [fetchChatHistory]);
 
+  useEffect(() => {
+    if (!isMinimized) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isMinimized]);
+
+  const onSubmit = async (formData) => {
+    setIsLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("text", newMessage);
-      formData.append("receiverId", sellerId.toString());
+      const sendFormData = new FormData();
+      sendFormData.append("text", formData.message);
+      sendFormData.append("receiverId", sellerId.toString());
 
-      if (selectedFile) {
-        formData.append("file", selectedFile);
+      if (formData.file && formData.file[0]) {
+        sendFormData.append("file", formData.file[0]);
       }
 
-      const response = await fetchWithAuth(
-        "http://www.product.somee.com/api/Chat/SendMessage",
+      const response = await fetch(
+        `http://www.product.somee.com/api/Chat/SendMessage`,
         {
           method: "POST",
-          body: formData,
+          body: sendFormData,
+
+          headers: {
+            Authorization: token,
+          },
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to send message");
+      const responseText = await response.text();
+      console.log("Send message response:", responseText);
+
+      const newMessageId = parseInt(responseText, 10);
+
+      if (!isNaN(newMessageId)) {
+        const newMessage = {
+          id: newMessageId,
+          text: formData.message,
+          isSendByMe: true,
+          sendDate: new Date().toISOString(),
+        };
+        setMessages((prevMessages) =>
+          [...prevMessages, newMessage].sort(
+            (a, b) => new Date(a.sendDate) - new Date(b.sendDate)
+          )
+        );
       }
 
-      // Add the sent message to the local state
-      setMessages([
-        ...messages,
-        {
-          text: newMessage,
-          sender: "user",
-          file: selectedFile ? URL.createObjectURL(selectedFile) : null,
-        },
-      ]);
-      setNewMessage("");
-      setSelectedFile(null);
+      reset();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     } catch (error) {
       console.error("Error sending message:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleMinimize = () => {
+    setIsMinimized(!isMinimized);
+    if (isMinimized) setHasNewMessage(false); // Reset notification when expanding
+  };
+
+  const handleNotificationClick = () => {
+    setHasNewMessage(false); // Reset notification when clicked
+  };
+
   return (
-    <div className="chat-window">
+    <div className={`chat-window ${isMinimized ? "minimized" : ""}`}>
       <div className="chat-header">
-        <h3>Chat with Seller</h3>
+        <h3>{isMinimized ? "Chat" : `Chat with ${sellerName}`}</h3>
+        <button onClick={handleMinimize}>
+          {isMinimized ? "Expand" : "Minimize"}
+        </button>
         <button onClick={onClose}>Close</button>
       </div>
-      <div className="chat-messages">
-        {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
-            {message.text}
-          </div>
-        ))}
-      </div>
-      <form onSubmit={handleSendMessage} className="chat-input">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a message..."
+      {!isMinimized && hasNewMessage && (
+        <div
+          className="notification-banner"
+          onClick={handleNotificationClick}
         />
-        <button type="submit">Send</button>
-      </form>
+      )}
+      <div className={`chat-messages ${isMinimized ? "hidden" : ""}`}>
+        {messages.length === 0 ? (
+          <p>No messages yet.</p>
+        ) : (
+          messages.map((message) => (
+            <div
+              key={message.id}
+              className={`message ${message.isSendByMe ? "user" : "seller"}`}
+            >
+              <p style={{ fontSize: 18 }}>{message.text}</p>
+              {message.fileUrl && (
+                <img
+                  src={message.fileUrl}
+                  alt="Attached file"
+                  className="message-file"
+                />
+              )}
+            </div>
+          ))
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+      {!isMinimized && (
+        <form onSubmit={handleSubmit(onSubmit)} className="chat-input">
+          <input
+            {...register("message", { required: true })}
+            type="text"
+            placeholder="Type a message..."
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send"}
+          </button>
+        </form>
+      )}
     </div>
   );
 }

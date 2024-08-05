@@ -11,7 +11,7 @@ import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import "./ProductGrid.css";
 
-function ProductGrid({ currentUserId }) {
+function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -22,6 +22,8 @@ function ProductGrid({ currentUserId }) {
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
   const [activeChatSellerId, setActiveChatSellerId] = useState(null);
+  const [activeChatSellerName, setActiveChatSellerName] = useState(null);
+
   const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -31,27 +33,21 @@ function ProductGrid({ currentUserId }) {
     setIsFiltersVisible(!isFiltersVisible);
   };
 
-  const handleChatClick = (sellerId) => {
+  const handleChatClick = (sellerId, sellerFullName) => {
     setActiveChatSellerId(sellerId);
+    setActiveChatSellerName(sellerFullName);
   };
 
   const handleCloseChat = () => {
     setActiveChatSellerId(null);
+    setActiveChatSellerName(null);
   };
 
   const toggleChatList = () => {
     setIsChatListOpen(!isChatListOpen);
     setActiveChatSellerId(null);
+    setActiveChatSellerName(null);
   };
-
-  // useEffect(() => {
-  //   // Simulate an API call
-  //   setTimeout(() => {
-  //     // Fetch products from API and set state
-  //     setProducts([]); // Replace with actual data fetching
-  //     setIsLoading(false);
-  //   }, 2000); // Simulate loading time
-  // }, []);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -68,6 +64,7 @@ function ProductGrid({ currentUserId }) {
     };
 
     fetchInitialData();
+    console.log(isGuest, "isGuest");
   }, []);
 
   const fetchProductsData = useCallback(async () => {
@@ -181,6 +178,13 @@ function ProductGrid({ currentUserId }) {
       console.error("Error deleting product:", error);
     }
   };
+  const getRatingInfo = (rating) => {
+    if (rating >= 90) return { class: "rating-excellent", phrase: "Excellent" };
+    if (rating >= 70) return { class: "rating-good", phrase: "Good" };
+    if (rating >= 50) return { class: "rating-fair", phrase: "Fair" };
+    if (rating >= 30) return { class: "rating-poor", phrase: "Poor" };
+    return { class: "rating-very-poor", phrase: "Very Poor" };
+  };
 
   if (isLoading) {
     return (
@@ -263,7 +267,6 @@ function ProductGrid({ currentUserId }) {
               value={status}
               onChange={handleStatusChange}
             >
-              <option value="">All Statuses</option>
               <option value="true">Available</option>
               <option value="false">Sold</option>
             </select>
@@ -325,27 +328,50 @@ function ProductGrid({ currentUserId }) {
                   </p>
                   <p className="product-description">{product.description}</p>
                   <p className="product-status">
-                    {product.isAvailable ? "Available" : "Sold"}
+                    {product.isAvailable
+                      ? `${product.quantity} Available`
+                      : "Sold"}
+                  </p>
+                  <p
+                    className={`seller-rating ${
+                      getRatingInfo(product.user.rating).class
+                    }`}
+                  >
+                    Seller Rating: {getRatingInfo(product.user.rating).phrase}
                   </p>
                 </div>
                 <div className="product-actions">
-                  <button
-                    className="chat-button"
-                    onClick={() => handleChatClick(product.user.id)}
-                  >
-                    Message Seller
-                  </button>
-                  {String(product.user.id) === currentUserId && (
+                  {isGuest ? (
+                    <p className="sign-in-message">Sign in to buy and sell</p>
+                  ) : (
                     <>
-                      {product.isAvailable && (
-                        <button className="sell-button">Mark as Sold</button>
+                      {String(product.user.id) === String(currentUserId) ? (
+                        <>
+                          {product.isAvailable && (
+                            <button className="sell-button">
+                              Mark as Sold
+                            </button>
+                          )}
+                          <button
+                            className="delete-button"
+                            onClick={() => handleDeleteProduct(product.id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="chat-button"
+                          onClick={() =>
+                            handleChatClick(
+                              product.user.id,
+                              product.user.fullName
+                            )
+                          }
+                        >
+                          Message {product.user.fullName}
+                        </button>
                       )}
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDeleteProduct(product.id)}
-                      >
-                        Delete
-                      </button>
                     </>
                   )}
                 </div>
@@ -366,7 +392,11 @@ function ProductGrid({ currentUserId }) {
       </div>
 
       {activeChatSellerId && (
-        <ChatWindow sellerId={activeChatSellerId} onClose={handleCloseChat} />
+        <ChatWindow
+          sellerId={activeChatSellerId}
+          onClose={handleCloseChat}
+          sellerName={activeChatSellerName}
+        />
       )}
     </div>
   );

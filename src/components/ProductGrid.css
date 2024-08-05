@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 30px;
   padding: 0 30px 30px 30px;
-  margin-top: 200px; /* Adjusted to account for filters and toggle button */
+  margin-top: 160px; /* Adjusted to account for filters and toggle button */
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -18,7 +18,7 @@
 }
 
 .product-grid:not(.filters-visible) {
-  margin-top: 80px; /* Reduced top margin when filters are hidden */
+  margin-top: 60px; /* Reduced top margin when filters are hidden */
 }
 
 .filters {
@@ -239,4 +239,51 @@
 
 .filter-toggle.active {
   transform: translateY(0); /* Remove vertical shift when active */
+}
+/* Add these classes for rating color coding */
+.seller-rating {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.rating-very-poor {
+  color: #ff4c4c; /* Red */
+}
+
+.rating-poor {
+  color: #ff6f6f; /* Light Red */
+}
+
+.rating-fair {
+  color: #f2b632; /* Yellow */
+}
+
+.rating-good {
+  color: #4caf50; /* Green */
+}
+
+.rating-excellent {
+  color: #388e3c; /* Dark Green */
+}
+
+/* Optional: To ensure proper spacing or formatting */
+.product-description {
+  margin-bottom: 10px;
+}
+.sign-in-message {
+  font-size: 1.2em;
+  color: #314acc; /* Blue theme color */
+  text-align: center;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #eef3ff; /* Light blue background */
+  border: 1px dashed #314acc; /* Dashed border */
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sign-in-message:hover {
+  background-color: #d8e2ff; /* Slightly darker blue on hover */
+  color: #1a3d9f; /* Darker blue text on hover */
+  cursor: pointer;
 }

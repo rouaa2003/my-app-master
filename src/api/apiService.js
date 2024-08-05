@@ -77,12 +77,15 @@ export const deleteProduct = async (productId) => {
         await response.json(); // This line assumes the response contains JSON
       }
       return true;
-    } else {
-      console.error("Failed to delete product:", response.statusText);
-      return false;
+    }
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      const errorMessage =
+        errorResponse.errorMessage || "An unknown error occurred";
+      throw new Error(errorMessage);
     }
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error deleting product:", error.errorMessage);
     return false;
   }
 };

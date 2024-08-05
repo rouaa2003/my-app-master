@@ -1,29 +1,40 @@
+/* Main chat window container */
 .chat-window {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 300px;
-  height: 400px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  height: 500px;
+  background-color: #f9f9f9; /* Light background for better contrast */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
+  transition: width 0.3s, height 0.3s;
 }
 
+.chat-window.minimized {
+  width: 300px;
+  height: 50px; /* Reduced height when minimized */
+}
+
+/* Header of the chat window */
 .chat-header {
-  background-color: #000080;
+  background-color: #000080; /* Dark blue */
   color: white;
-  padding: 10px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #e0e0e0; /* Light border for separation */
 }
 
 .chat-header h3 {
   margin: 0;
+  font-size: 14px; /* Smaller font size */
+  font-weight: 500;
 }
 
 .chat-header button {
@@ -31,50 +42,108 @@
   border: none;
   color: white;
   cursor: pointer;
+  font-size: 14px; /* Smaller font size */
 }
 
+/* Messages container */
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Notification banner for new messages */
+.notification-banner {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff0000; /* Red */
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 18px; /* Slightly larger for visibility */
+}
+
+/* Styling for bell icon */
+.notification-banner::before {
+  content: "🔔"; /* Red bell icon */
+}
+
+/* Individual message styling */
 .message {
   margin-bottom: 10px;
-  padding: 5px 10px;
-  border-radius: 10px;
-  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 80%;
+  font-size: 12px; /* Smaller font size */
+  line-height: 1.4;
+  position: relative;
 }
 
 .message.user {
-  background-color: #e6f2ff;
+  background-color: #e6f2ff; /* Light blue for user messages */
   align-self: flex-end;
   margin-left: auto;
 }
 
 .message.seller {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Light gray for seller messages */
   align-self: flex-start;
 }
 
+/* Message text styling */
+.message p {
+  margin: 0;
+}
+
+/* Styling for attached files */
+.message-file {
+  margin-top: 5px;
+  max-width: 100px; /* Limit file preview size */
+  border-radius: 5px;
+}
+
+/* Input area styling */
 .chat-input {
   display: flex;
   padding: 10px;
+  border-top: 1px solid #e0e0e0; /* Light border for separation */
+  background-color: white;
 }
 
-.chat-input input {
+.chat-input input[type="text"] {
   flex-grow: 1;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-right: 5px;
+  margin-right: 8px;
+  font-size: 12px; /* Smaller font size */
+}
+
+.chat-input input[type="file"] {
+  margin-right: 8px;
 }
 
 .chat-input button {
-  background-color: #000080;
+  background-color: #000080; /* Dark blue */
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 12px; /* Smaller font size */
+}
+
+.chat-input button:disabled {
+  background-color: #cccccc; /* Gray for disabled button */
+  cursor: not-allowed;
 }

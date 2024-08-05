@@ -55,7 +55,10 @@ function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
       );
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.errorMessage || "An unknown error occurred";
+        throw new Error(errorMessage);
       }
 
       setSuccessMessage(
@@ -71,7 +74,7 @@ function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
         if (onRegisterSuccess) onRegisterSuccess();
       }, 2000);
     } catch (error) {
-      setErrorMessage("Registration failed. Please try again.");
+      setErrorMessage(error.message);
     }
   };
 
@@ -103,7 +106,13 @@ function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
           name="phoneNumber"
           control={control}
           defaultValue=""
-          rules={{ required: "Phone number is required" }}
+          rules={{
+            required: "Phone number is required",
+            pattern: {
+              value: /^[0-9]+$/,
+              message: "Phone number must contain only numbers",
+            },
+          }}
           render={({ field }) => (
             <>
               <label htmlFor="phoneNumber">Phone Number:</label>
@@ -135,7 +144,14 @@ function RegistrationForm({ onClose, onRegisterSuccess, onSwitchToLogin }) {
           name="fullName"
           control={control}
           defaultValue=""
-          rules={{ required: "Full Name is required" }}
+          rules={{
+            required: "Full Name is required",
+            pattern: {
+              value: /^[A-Za-z]+\s[A-Za-z]+$/,
+              message:
+                "Full Name must consist of at least two parts separated by a space",
+            },
+          }}
           render={({ field }) => (
             <>
               <label htmlFor="fullName">Full Name:</label>
