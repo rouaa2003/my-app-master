@@ -3,13 +3,20 @@ export const fetchWithAuth = async (url, options = {}) => {
   const headers = {
     ...options.headers,
     Authorization: token,
+    // "Content-Type": "application/json",
   };
 
-  const response = await fetch(url, { ...options, headers });
+  try {
+    const response = await fetch(url, { ...options, headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+    // Assuming the response is JSON; adjust if needed
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
   }
-
-  return response.json();
 };
