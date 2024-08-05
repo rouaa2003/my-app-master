@@ -74,7 +74,6 @@ function ProductGrid({
   }, []);
 
   const fetchProductsData = useCallback(async () => {
-    setIsLoading(true);
     try {
       const filters = {
         categoryId: selectedCategory || undefined,
@@ -115,7 +114,7 @@ function ProductGrid({
 
   useEffect(() => {
     fetchProductsData();
-  }, [authStateChange]);
+  }, [fetchProductsData]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
