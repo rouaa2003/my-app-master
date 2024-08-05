@@ -106,11 +106,12 @@ function AddProductForm({ onClose, onSuccess }) {
           onSuccess();
         }
         onClose();
-      } else {
-        const errorText = await response.text();
-        throw new Error(
-          `HTTP error! status: ${response.status}, body: ${errorText}`
-        );
+      }
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        const errorMessage =
+          errorResponse.errorMessage || "An unknown error occurred";
+        throw new Error(errorMessage);
       }
     } catch (error) {
       setError(`Error adding product: ${error.message}`);
