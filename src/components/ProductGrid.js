@@ -22,6 +22,8 @@ function ProductGrid({ currentUserId }) {
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
   const [activeChatSellerId, setActiveChatSellerId] = useState(null);
+  const [activeChatSellerName, setActiveChatSellerName] = useState(null);
+
   const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -31,27 +33,21 @@ function ProductGrid({ currentUserId }) {
     setIsFiltersVisible(!isFiltersVisible);
   };
 
-  const handleChatClick = (sellerId) => {
+  const handleChatClick = (sellerId, sellerFullName) => {
     setActiveChatSellerId(sellerId);
+    setActiveChatSellerName(sellerFullName);
   };
 
   const handleCloseChat = () => {
     setActiveChatSellerId(null);
+    setActiveChatSellerName(null);
   };
 
   const toggleChatList = () => {
     setIsChatListOpen(!isChatListOpen);
     setActiveChatSellerId(null);
+    setActiveChatSellerName(null);
   };
-
-  // useEffect(() => {
-  //   // Simulate an API call
-  //   setTimeout(() => {
-  //     // Fetch products from API and set state
-  //     setProducts([]); // Replace with actual data fetching
-  //     setIsLoading(false);
-  //   }, 2000); // Simulate loading time
-  // }, []);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -332,7 +328,9 @@ function ProductGrid({ currentUserId }) {
                   </p>
                   <p className="product-description">{product.description}</p>
                   <p className="product-status">
-                    {product.isAvailable ? "Available" : "Sold"}
+                    {product.isAvailable
+                      ? `${product.quantity} Available`
+                      : "Sold"}
                   </p>
                   <p
                     className={`seller-rating ${
@@ -343,13 +341,7 @@ function ProductGrid({ currentUserId }) {
                   </p>
                 </div>
                 <div className="product-actions">
-                  <button
-                    className="chat-button"
-                    onClick={() => handleChatClick(product.user.id)}
-                  >
-                    Message Seller
-                  </button>
-                  {String(product.user.id) === currentUserId && (
+                  {String(product.user.id) === String(currentUserId) ? (
                     <>
                       {product.isAvailable && (
                         <button className="sell-button">Mark as Sold</button>
@@ -361,6 +353,15 @@ function ProductGrid({ currentUserId }) {
                         Delete
                       </button>
                     </>
+                  ) : (
+                    <button
+                      className="chat-button"
+                      onClick={() =>
+                        handleChatClick(product.user.id, product.user.fullName)
+                      }
+                    >
+                      Message {product.user.fullName}
+                    </button>
                   )}
                 </div>
               </div>
@@ -380,7 +381,11 @@ function ProductGrid({ currentUserId }) {
       </div>
 
       {activeChatSellerId && (
-        <ChatWindow sellerId={activeChatSellerId} onClose={handleCloseChat} />
+        <ChatWindow
+          sellerId={activeChatSellerId}
+          onClose={handleCloseChat}
+          sellerName={activeChatSellerName}
+        />
       )}
     </div>
   );

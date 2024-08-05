@@ -3,7 +3,7 @@ export const fetchWithAuth = async (url, options = {}) => {
   const headers = {
     ...options.headers,
     Authorization: token,
-    "Content-Type": "application/json", // Set content type for POST/PUT requests
+    // "Content-Type": "application/json",
   };
 
   try {

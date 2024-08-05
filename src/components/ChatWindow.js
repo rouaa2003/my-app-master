@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
 import "./ChatWindow.css";
 
-function ChatWindow({ sellerId, onClose }) {
+function ChatWindow({ sellerId, onClose, sellerName }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -127,7 +127,7 @@ function ChatWindow({ sellerId, onClose }) {
   return (
     <div className={`chat-window ${isMinimized ? "minimized" : ""}`}>
       <div className="chat-header">
-        <h3>{isMinimized ? "Chat" : "Chat with Seller"}</h3>
+        <h3>{isMinimized ? "Chat" : `Chat with ${sellerName}`}</h3>
         <button onClick={handleMinimize}>
           {isMinimized ? "Expand" : "Minimize"}
         </button>
