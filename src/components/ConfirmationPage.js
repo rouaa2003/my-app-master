@@ -12,6 +12,8 @@ const ConfirmationPage = () => {
   } = useForm();
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [isVisible, setIsVisible] = useState(true); // State to control visibility
+
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -27,8 +29,7 @@ const ConfirmationPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          // Since the API expects query parameters, body is not needed
-          body: null,
+          body: null, // Since the API expects query parameters, body is not needed
         }
       );
 
@@ -72,8 +73,18 @@ const ConfirmationPage = () => {
     }
   };
 
+  const handleClose = () => {
+    setIsVisible(false);
+    navigate("/");
+  };
+
+  if (!isVisible) return null; // Render nothing if not visible
+
   return (
     <div className="confirmation-page-container">
+      <button className="close-button" onClick={handleClose}>
+        &times;
+      </button>
       <h2>Confirm Your Account</h2>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
