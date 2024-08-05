@@ -81,51 +81,53 @@ const ConfirmationPage = () => {
   if (!isVisible) return null; // Render nothing if not visible
 
   return (
-    <div className="confirmation-page-container">
-      <button className="close-button" onClick={handleClose}>
-        &times;
-      </button>
-      <h2>Confirm Your Account</h2>
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="email"
-          control={control}
-          defaultValue=""
-          rules={{ required: "Email is required" }}
-          render={({ field }) => (
-            <>
-              <label htmlFor="email">Email:</label>
-              <input type="email" id="email" {...field} />
-              {errors.email && (
-                <p className="error-message">{errors.email.message}</p>
-              )}
-            </>
-          )}
-        />
+    <div className="confirmation-overlay">
+      <div className="confirmation-page-container">
+        <button className="close-button" onClick={handleClose}>
+          &times;
+        </button>
+        <h2>Confirm Your Account</h2>
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            rules={{ required: "Email is required" }}
+            render={({ field }) => (
+              <>
+                <label htmlFor="email">Email:</label>
+                <input type="email" id="email" {...field} />
+                {errors.email && (
+                  <p className="error-message">{errors.email.message}</p>
+                )}
+              </>
+            )}
+          />
 
-        <Controller
-          name="code"
-          control={control}
-          defaultValue=""
-          rules={{ required: "Confirmation code is required" }}
-          render={({ field }) => (
-            <>
-              <label htmlFor="code">Confirmation Code:</label>
-              <input type="text" id="code" {...field} />
-              {errors.code && (
-                <p className="error-message">{errors.code.message}</p>
-              )}
-            </>
-          )}
-        />
+          <Controller
+            name="code"
+            control={control}
+            defaultValue=""
+            rules={{ required: "Confirmation code is required" }}
+            render={({ field }) => (
+              <>
+                <label htmlFor="code">Confirmation Code:</label>
+                <input type="text" id="code" {...field} />
+                {errors.code && (
+                  <p className="error-message">{errors.code.message}</p>
+                )}
+              </>
+            )}
+          />
 
-        <button type="submit">Confirm Account</button>
-      </form>
-      <button type="button" onClick={handleResendEmail}>
-        Resend Confirmation Email
-      </button>
+          <button type="submit">Confirm Account</button>
+        </form>
+        <button type="button" onClick={handleResendEmail}>
+          Resend Confirmation Email
+        </button>
+      </div>
     </div>
   );
 };
