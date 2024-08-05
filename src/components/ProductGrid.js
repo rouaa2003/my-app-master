@@ -9,9 +9,16 @@ import { Atom } from "react-loading-indicators";
 import { Filter } from "lucide-react";
 import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
+import { getRatingInfo } from "../utils/getRatingInfo";
 import "./ProductGrid.css";
 
-function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
+function ProductGrid({
+  currentUserId,
+  isGuest,
+  isAuthenticated,
+  authStateChange,
+  onLoginSuccess,
+}) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -64,7 +71,6 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     };
 
     fetchInitialData();
-    console.log(isGuest, "isGuest");
   }, []);
 
   const fetchProductsData = useCallback(async () => {
@@ -109,7 +115,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
 
   useEffect(() => {
     fetchProductsData();
-  }, [fetchProductsData]);
+  }, [authStateChange]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
@@ -177,13 +183,6 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     } catch (error) {
       console.error("Error deleting product:", error);
     }
-  };
-  const getRatingInfo = (rating) => {
-    if (rating >= 90) return { class: "rating-excellent", phrase: "Excellent" };
-    if (rating >= 70) return { class: "rating-good", phrase: "Good" };
-    if (rating >= 50) return { class: "rating-fair", phrase: "Fair" };
-    if (rating >= 30) return { class: "rating-poor", phrase: "Poor" };
-    return { class: "rating-very-poor", phrase: "Very Poor" };
   };
 
   if (isLoading) {
@@ -341,6 +340,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
                   </p>
                 </div>
                 <div className="product-actions">
+                  {console.log("isGuestisGuestisGuestisGuest", isGuest)}
                   {isGuest ? (
                     <p className="sign-in-message">Sign in to buy and sell</p>
                   ) : (
