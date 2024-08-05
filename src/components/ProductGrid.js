@@ -266,7 +266,6 @@ function ProductGrid({ currentUserId }) {
               value={status}
               onChange={handleStatusChange}
             >
-              <option value="">All Statuses</option>
               <option value="true">Available</option>
               <option value="false">Sold</option>
             </select>
