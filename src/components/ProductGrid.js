@@ -8,7 +8,7 @@ import {
 import { Atom } from "react-loading-indicators";
 import { Filter } from "lucide-react";
 import ChatWindow from "./ChatWindow";
-import ChatList from "./ChatList";
+
 import { getRatingInfo } from "../utils/getRatingInfo";
 import "./ProductGrid.css";
 
@@ -30,8 +30,6 @@ function ProductGrid({
   const [status, setStatus] = useState("");
   const [activeChatSellerId, setActiveChatSellerId] = useState(null);
   const [activeChatSellerName, setActiveChatSellerName] = useState(null);
-
-  const [isChatListOpen, setIsChatListOpen] = useState(false);
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
@@ -50,11 +48,6 @@ function ProductGrid({
     setActiveChatSellerName(null);
   };
 
-  const toggleChatList = () => {
-    setIsChatListOpen(!isChatListOpen);
-    setActiveChatSellerId(null);
-    setActiveChatSellerName(null);
-  };
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -207,7 +200,7 @@ function ProductGrid({
         {isFiltersVisible ? "Hide Filters" : "Show Filters"}
       </button>
       <div
-        className={`product-grid ${isChatListOpen ? "shrink" : ""} ${
+        className={`product-grid ${
           isFiltersVisible ? "filters-visible" : ""
         }`}
       >
@@ -380,14 +373,6 @@ function ProductGrid({
             <p>No products available</p>
           )}
         </div>
-      </div>
-
-      <button className="chat-list-toggle" onClick={toggleChatList}>
-        {isChatListOpen ? "Close Chat List" : "Open Chat List"}
-      </button>
-
-      <div className={`chat-list-container ${isChatListOpen ? "open" : ""}`}>
-        {isChatListOpen && <ChatList onSelectChat={handleChatClick} />}
       </div>
 
       {activeChatSellerId && (
