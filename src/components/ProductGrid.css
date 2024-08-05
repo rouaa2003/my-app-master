@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 30px;
   padding: 0 30px 30px 30px;
-  margin-top: 200px; /* Adjusted to account for filters and toggle button */
+  margin-top: 160px; /* Adjusted to account for filters and toggle button */
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -18,7 +18,7 @@
 }
 
 .product-grid:not(.filters-visible) {
-  margin-top: 80px; /* Reduced top margin when filters are hidden */
+  margin-top: 60px; /* Reduced top margin when filters are hidden */
 }
 
 .filters {

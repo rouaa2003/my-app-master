@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./ProfileModal.css";
 
-function ProfileModal({ onClose, emailAddress, fullName, profilePicUrl }) {
-  console.log("profilePicUrl", profilePicUrl);
+function ProfileModal({ onClose, emailAddress, fullName }) {
+  
   // const [file, setFile] = useState(null);
 
   // const handleFileChange = (event) => {
@@ -23,18 +23,11 @@ function ProfileModal({ onClose, emailAddress, fullName, profilePicUrl }) {
           &times;
         </span>
         <h2>Profile Details</h2>
-        <div
-          className="profile-pic"
-          id="profilePic"
-          onClick={() => document.getElementById("fileInput").click()}
-        >
-          <img src={profilePicUrl} className="profile-image" alt="Profile" />
-        </div>
+        
         <input
           type="file"
           id="fileInput"
-          accept="image/*"
-          // onChange={handleFileChange}
+         
           style={{ display: "none" }}
         />
         <p style={{ fontSize: "20px" }}>Name: {fullName}</p>

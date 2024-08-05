@@ -25,9 +25,7 @@ function App() {
   const [currentUserId, setUserId] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
-  const [profilePicUrl, setProfilePicUrl] = useState(
-    "./assets/image/profile.png"
-  );
+  
 
   const navigate = useNavigate();
 
@@ -42,9 +40,7 @@ function App() {
     setFullName(localStorage.getItem("fullName"));
     setEmailAddress(localStorage.getItem("userName"));
     setUserId(localStorage.getItem("userId"));
-    if (localStorage.getItem("ProfilePic")) {
-      setProfilePicUrl(localStorage.getItem("ProfilePic"));
-    }
+    
   };
 
   useEffect(() => {
@@ -152,7 +148,7 @@ function App() {
               currentUserId={currentUserId}
               fullName={fullName}
               emailAddress={emailAddress}
-              profilePicUrl={profilePicUrl}
+            
             />
           )}
 
