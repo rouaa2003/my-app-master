@@ -70,17 +70,19 @@
 /* Profile Info Styling */
 .profile-info {
   margin-top: 20px;
-  font-size: 18px;
+  font-size: 25px;
   line-height: 1.6;
 }
 
 .profile-info p {
   margin: 10px 0;
+  font-size: 25px;
 }
 
 .profile-info span {
   font-weight: bold;
   color: #000080;
+  font-size: 25px;
 }
 
 /* Animations */
@@ -118,4 +120,28 @@
 /* Enhanced Loading Indicator */
 .loading-indicator .Atom {
   animation: loadingSpin 1s linear infinite;
+}
+
+.seller-rating {
+  font-size: 25px;
+}
+
+.rating-very-poor {
+  color: #ff4c4c; /* Red */
+}
+
+.rating-poor {
+  color: #ff6f6f; /* Light Red */
+}
+
+.rating-fair {
+  color: #f2b632; /* Yellow */
+}
+
+.rating-good {
+  color: #4caf50; /* Green */
+}
+
+.rating-excellent {
+  color: #388e3c; /* Dark Green */
 }

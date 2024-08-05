@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Atom } from "react-loading-indicators";
+import { getRatingInfo } from "../utils/getRatingInfo";
 import "./ProfileModal.css";
 
 function ProfileModal({ onClose, currentUserId, authToken }) {
@@ -79,8 +80,13 @@ function ProfileModal({ onClose, currentUserId, authToken }) {
             <p>
               <span>Location:</span> {profileData?.city?.name || "N/A"}
             </p>
-            <p>
-              <span>Rating:</span> {profileData?.rating || "N/A"}
+            <p
+              className={`seller-rating ${
+                getRatingInfo(profileData?.rating).class
+              }`}
+            >
+              <span>Rating:</span>{" "}
+              {getRatingInfo(profileData?.rating).phrase || "N/A"}
             </p>
           </div>
         )}
