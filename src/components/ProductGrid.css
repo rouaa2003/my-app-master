@@ -46,6 +46,7 @@
 .filter {
   flex: 1;
   min-width: 200px;
+ 
 }
 
 .filter label {
@@ -175,6 +176,7 @@
   opacity: 0.9;
 }
 
+<<<<<<< HEAD
 .product-grid.shrink {
   width: 75%; /* Shrink product grid width to 65% */
 }
@@ -209,6 +211,9 @@
 .chat-list-toggle:hover {
   opacity: 1;
 }
+=======
+
+>>>>>>> parent of 3d371ef (Revert "cccc")
 .loading-indicator {
   display: flex;
   justify-content: center;
@@ -287,4 +292,7 @@
   background-color: #d8e2ff; /* Slightly darker blue on hover */
   color: #1a3d9f; /* Darker blue text on hover */
   cursor: pointer;
+}
+#search-input{
+  width:90%;
 }
