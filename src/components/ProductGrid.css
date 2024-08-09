@@ -176,17 +176,18 @@
 }
 
 .product-grid.shrink {
-  width: 65%; /* Shrink product grid width to 65% */
+  width: 75%; /* Shrink product grid width to 65% */
 }
 
 .chat-list-container {
   width: 0;
   overflow: hidden;
   transition: width 0.3s;
+  margin-top: 500px;
 }
 
 .chat-list-container.open {
-  width: 35%; /* Set chat list container width to 35% */
+  width: 25%; /* Set chat list container width to 35% */
 }
 
 .chat-list-toggle {
