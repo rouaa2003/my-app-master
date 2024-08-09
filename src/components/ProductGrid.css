@@ -46,7 +46,6 @@
 .filter {
   flex: 1;
   min-width: 200px;
- 
 }
 
 .filter label {
@@ -176,7 +175,39 @@
   opacity: 0.9;
 }
 
+.product-grid.shrink {
+  width: 65%; /* Shrink product grid width to 65% */
+}
 
+.chat-list-container {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s;
+}
+
+.chat-list-container.open {
+  width: 35%; /* Set chat list container width to 35% */
+}
+
+.chat-list-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #000080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  margin-bottom: 4rem;
+}
+
+.chat-list-toggle:hover {
+  opacity: 1;
+}
 .loading-indicator {
   display: flex;
   justify-content: center;
@@ -255,7 +286,4 @@
   background-color: #d8e2ff; /* Slightly darker blue on hover */
   color: #1a3d9f; /* Darker blue text on hover */
   cursor: pointer;
-}
-#search-input{
-  width:90%;
 }
