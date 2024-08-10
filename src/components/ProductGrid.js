@@ -9,7 +9,7 @@ import { Atom } from "react-loading-indicators";
 import { Filter } from "lucide-react";
 import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
-import { getRatingInfo } from "../utils/getRatingInfo";
+import { renderStars } from "../utils/renderStars";
 import "./ProductGrid.css";
 
 function ProductGrid({
@@ -115,7 +115,7 @@ function ProductGrid({
 
   useEffect(() => {
     fetchProductsData();
-  }, [authStateChange]);
+  }, [fetchProductsData]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
@@ -331,13 +331,10 @@ function ProductGrid({
                       ? `${product.quantity} Available`
                       : "Sold"}
                   </p>
-                  <p
-                    className={`seller-rating ${
-                      getRatingInfo(product.user.rating).class
-                    }`}
-                  >
-                    Seller Rating: {getRatingInfo(product.user.rating).phrase}
-                  </p>
+                  <span>
+                    Seller: {product.user.fullName}{" "}
+                    {renderStars(product.user.rating)}
+                  </span>
                 </div>
                 <div className="product-actions">
                   {console.log("isGuestisGuestisGuestisGuest", isGuest)}
@@ -383,9 +380,9 @@ function ProductGrid({
         </div>
       </div>
 
-      <button className="chat-list-toggle" onClick={toggleChatList}>
+      {/* <button className="chat-list-toggle" onClick={toggleChatList}>
         {isChatListOpen ? "Close Chat List" : "Open Chat List"}
-      </button>
+      </button> */}
 
       <div className={`chat-list-container ${isChatListOpen ? "open" : ""}`}>
         {isChatListOpen && <ChatList onSelectChat={handleChatClick} />}

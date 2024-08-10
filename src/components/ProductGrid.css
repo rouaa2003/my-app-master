@@ -240,31 +240,6 @@
 .filter-toggle.active {
   transform: translateY(0); /* Remove vertical shift when active */
 }
-/* Add these classes for rating color coding */
-.seller-rating {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.rating-very-poor {
-  color: #ff4c4c; /* Red */
-}
-
-.rating-poor {
-  color: #ff6f6f; /* Light Red */
-}
-
-.rating-fair {
-  color: #f2b632; /* Yellow */
-}
-
-.rating-good {
-  color: #4caf50; /* Green */
-}
-
-.rating-excellent {
-  color: #388e3c; /* Dark Green */
-}
 
 /* Optional: To ensure proper spacing or formatting */
 .product-description {
@@ -286,4 +261,14 @@
   background-color: #d8e2ff; /* Slightly darker blue on hover */
   color: #1a3d9f; /* Darker blue text on hover */
   cursor: pointer;
+}
+
+.seller-rating .star {
+  font-size: 14px;
+  color: #ccc; /* Default star color */
+  margin-right: 2px;
+}
+
+.seller-rating .star.filled {
+  color: #ffac33; /* Filled star color */
 }
