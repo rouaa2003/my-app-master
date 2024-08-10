@@ -6,10 +6,11 @@ import {
   deleteProduct,
 } from "../api/apiService";
 import { Atom } from "react-loading-indicators";
-import { Filter } from "lucide-react";
+import { Filter, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ChatWindow from "./ChatWindow";
 import ChatList from "./ChatList";
 import { renderStars } from "../utils/renderStars";
+import { motion, AnimatePresence } from "framer-motion";
 import "./ProductGrid.css";
 
 function ProductGrid({
@@ -35,6 +36,7 @@ function ProductGrid({
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const toggleFilters = () => {
     setIsFiltersVisible(!isFiltersVisible);
@@ -184,6 +186,11 @@ function ProductGrid({
       console.error("Error deleting product:", error);
     }
   };
+  const productVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.5 } },
+  };
 
   if (isLoading) {
     return (
@@ -199,20 +206,34 @@ function ProductGrid({
   }
 
   return (
-    <div className="product-grid-container">
-      <button
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="product-grid-container"
+    >
+      <motion.button
         className={`filter-toggle ${isFiltersVisible ? "active" : ""}`}
         onClick={toggleFilters}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
-        <Filter size={18} />
+        {isFiltersVisible ? <X size={18} /> : <Filter size={18} />}
         {isFiltersVisible ? "Hide Filters" : "Show Filters"}
-      </button>
+      </motion.button>
       <div
         className={`product-grid ${isChatListOpen ? "shrink" : ""} ${
           isFiltersVisible ? "filters-visible" : ""
         }`}
       >
-        <div className={`filters ${isFiltersVisible ? "visible" : ""}`}>
+        <motion.div
+          className={`filters ${isFiltersVisible ? "visible" : ""}`}
+          initial={false}
+          animate={
+            isFiltersVisible ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }
+          }
+          transition={{ duration: 0.3 }}
+        >
           <div className="filter">
             <label htmlFor="category-select">Category</label>
             <select
@@ -280,123 +301,178 @@ function ProductGrid({
               placeholder="Search products..."
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="product-cards">
-          {products.length > 0 ? (
-            products.map((product) => (
-              <div className="product-card" key={product.id}>
-                <div className="product-image">
-                  {product.files && product.files.length > 0 ? (
-                    <>
-                      <img
-                        src={getImageUrl(
-                          product.files[imageIndices[product.id]].url
-                        )}
-                        alt={product.title}
-                        onError={(error) => {
-                          console.log("error", error);
-                        }}
-                      />
-                      {product.files.length > 1 && (
-                        <>
-                          <button
-                            className="image-nav-button prev-button"
-                            onClick={() => handlePreviousImage(product.id)}
-                          >
-                            &#8249;
-                          </button>
-                          <button
-                            className="image-nav-button next-button"
-                            onClick={() => handleNextImage(product.id)}
-                          >
-                            &#8250;
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <div className="placeholder-image">No Image</div>
-                  )}
-                </div>
-                <div className="product-details">
-                  <h3 className="product-title">{product.title}</h3>
-                  <p className="product-price">${product.price}</p>
-                  <p className="product-location">
-                    {product.city.name}, {product.city.country.name}
-                  </p>
-                  <p className="product-description">{product.description}</p>
-                  <p className="product-status">
-                    {product.isAvailable
-                      ? `${product.quantity} Available`
-                      : "Sold"}
-                  </p>
-                  <span>
-                    Seller: {product.user.fullName}{" "}
-                    {renderStars(product.user.rating)}
-                  </span>
-                </div>
-                <div className="product-actions">
-                  {console.log("isGuestisGuestisGuestisGuest", isGuest)}
-                  {isGuest ? (
-                    <p className="sign-in-message">Sign in to buy and sell</p>
-                  ) : (
-                    <>
-                      {String(product.user.id) === String(currentUserId) ? (
-                        <>
-                          {product.isAvailable && (
-                            <button className="sell-button">
-                              Mark as Sold
-                            </button>
+        <AnimatePresence>
+          <motion.div className="product-cards" layout>
+            {products.length > 0 ? (
+              products.map((product) => (
+                <motion.div
+                  className="product-card"
+                  key={product.id}
+                  variants={productVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  layout
+                  onHoverStart={() => setHoveredProduct(product.id)}
+                  onHoverEnd={() => setHoveredProduct(null)}
+                >
+                  <div className="product-image">
+                    {product.files && product.files.length > 0 ? (
+                      <>
+                        <img
+                          src={getImageUrl(
+                            product.files[imageIndices[product.id]].url
                           )}
-                          <button
-                            className="delete-button"
-                            onClick={() => handleDeleteProduct(product.id)}
+                          alt={product.title}
+                          onError={(error) => {
+                            console.log("error", error);
+                          }}
+                        />
+                        {product.files.length > 1 && (
+                          <>
+                            <motion.button
+                              className="image-nav-button prev-button"
+                              onClick={() => handlePreviousImage(product.id)}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <ChevronLeft size={24} />
+                            </motion.button>
+                            <motion.button
+                              className="image-nav-button next-button"
+                              onClick={() => handleNextImage(product.id)}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <ChevronRight size={24} />
+                            </motion.button>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <div className="placeholder-image">No Image</div>
+                    )}
+                  </div>
+                  <motion.div
+                    className="product-details"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <h3 className="product-title">{product.title}</h3>
+                    <p className="product-price">${product.price}</p>
+                    <p className="product-location">
+                      {product.city.name}, {product.city.country.name}
+                    </p>
+                    <p className="product-description">{product.description}</p>
+                    <p className="product-status">
+                      {product.isAvailable
+                        ? `${product.quantity} Available`
+                        : "Sold"}
+                    </p>
+                    <span className="seller-info">
+                      Seller: {product.user.fullName}{" "}
+                      {renderStars(product.user.rating)}
+                    </span>
+                  </motion.div>
+                  <motion.div
+                    className="product-actions"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    {isGuest ? (
+                      <p className="sign-in-message">Sign in to buy and sell</p>
+                    ) : (
+                      <>
+                        {String(product.user.id) === String(currentUserId) ? (
+                          <>
+                            {product.isAvailable && (
+                              <motion.button
+                                className="sell-button"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                              >
+                                Mark as Sold
+                              </motion.button>
+                            )}
+                            <motion.button
+                              className="delete-button"
+                              onClick={() => handleDeleteProduct(product.id)}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                            >
+                              Delete
+                            </motion.button>
+                          </>
+                        ) : (
+                          <motion.button
+                            className="chat-button"
+                            onClick={() =>
+                              handleChatClick(
+                                product.user.id,
+                                product.user.fullName
+                              )
+                            }
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                           >
-                            Delete
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          className="chat-button"
-                          onClick={() =>
-                            handleChatClick(
-                              product.user.id,
-                              product.user.fullName
-                            )
-                          }
-                        >
-                          Message {product.user.fullName}
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No products available</p>
-          )}
-        </div>
+                            Message {product.user.fullName}
+                          </motion.button>
+                        )}
+                      </>
+                    )}
+                  </motion.div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                No products available
+              </motion.p>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* <button className="chat-list-toggle" onClick={toggleChatList}>
-        {isChatListOpen ? "Close Chat List" : "Open Chat List"}
-      </button> */}
-
-      <div className={`chat-list-container ${isChatListOpen ? "open" : ""}`}>
+      <motion.div
+        className={`chat-list-container ${isChatListOpen ? "open" : ""}`}
+        initial={false}
+        animate={isChatListOpen ? { width: "35%" } : { width: 0 }}
+        transition={{ duration: 0.3 }}
+      >
         {isChatListOpen && <ChatList onSelectChat={handleChatClick} />}
-      </div>
+      </motion.div>
 
-      {activeChatSellerId && (
-        <ChatWindow
-          sellerId={activeChatSellerId}
-          onClose={handleCloseChat}
-          sellerName={activeChatSellerName}
-        />
-      )}
-    </div>
+      <AnimatePresence>
+        {activeChatSellerId && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ChatWindow
+              sellerId={activeChatSellerId}
+              onClose={handleCloseChat}
+              sellerName={activeChatSellerName}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
 export default ProductGrid;
+
+/*
+
+      
+
+*/

@@ -3,44 +3,38 @@
   width: 100%;
   transition: width 0.3s;
   position: relative;
+  overflow-x: hidden;
 }
-/* Styling for the product grid */
+
 .product-grid {
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 0 30px 30px 30px;
-  margin-top: 160px; /* Adjusted to account for filters and toggle button */
+  margin-top: 250px;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   transition: margin-top 0.3s ease-in-out;
 }
 
 .product-grid:not(.filters-visible) {
-  margin-top: 60px; /* Reduced top margin when filters are hidden */
+  margin-top: 150px;
 }
 
 .filters {
   position: fixed;
-  top: 165px; /* Positioned below the filter toggle button */
+  top: 165px;
   left: 0;
   right: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  background-color: rgb(0, 0, 128);
+  background-color: rgba(0, 0, 128, 0.9);
   z-index: 5;
   border-bottom: 1px solid #ccc;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.filters:not(.visible) {
-  transform: translateY(-100%);
-  opacity: 0;
+  backdrop-filter: blur(5px);
 }
 
 .filter {
@@ -52,6 +46,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: white;
 }
 
 .filter select,
@@ -61,14 +56,21 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.filter select:focus,
+.filter input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.5);
 }
 
 .product-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding-top: 150px; /* Adjust padding to avoid overlap with fixed filters */
+  padding-top: 20px;
 }
 
 .product-card {
@@ -76,22 +78,29 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .product-image {
-  height: 200px;
+  height: 250px;
   overflow: hidden;
+  position: relative;
 }
 
 .product-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
 }
 
 .placeholder-image {
@@ -103,21 +112,56 @@
   color: #888;
 }
 
+.image-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.product-card:hover .image-nav-button {
+  opacity: 1;
+}
+
+.image-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
 .product-details {
-  padding: 15px;
+  padding: 20px;
 }
 
 .product-title {
   margin: 0 0 10px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  color: #333;
 }
 
 .product-price {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
-  color: #4a4a4a;
-  margin-bottom: 5px;
+  color: #000080;
+  margin-bottom: 10px;
 }
 
 .product-location,
@@ -128,20 +172,31 @@
   margin: 5px 0;
 }
 
+.seller-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #333;
+  margin-top: 10px;
+}
+
 .product-actions {
   display: flex;
   justify-content: space-between;
-  padding: 0 15px 15px;
+  padding: 0 20px 20px;
 }
 
 .chat-button,
-.sell-button {
-  padding: 8px 15px;
+.sell-button,
+.delete-button {
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .chat-button {
@@ -150,74 +205,38 @@
 }
 
 .sell-button {
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.chat-button:hover,
-.sell-button:hover {
-  opacity: 0.9;
+  background-color: #4caf50;
+  color: white;
 }
 
 .delete-button {
   background-color: #ff4c4c;
   color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
 }
 
+.chat-button:hover,
+.sell-button:hover,
 .delete-button:hover {
-  background-color: #ff1a1a;
   opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 .product-grid.shrink {
-  width: 65%; /* Shrink product grid width to 65% */
+  width: 65%;
 }
 
 .chat-list-container {
-  width: 0;
   overflow: hidden;
   transition: width 0.3s;
 }
 
 .chat-list-container.open {
-  width: 35%; /* Set chat list container width to 35% */
+  width: 35%;
 }
 
-.chat-list-toggle {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: #000080;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-  z-index: 1000;
-  margin-bottom: 4rem;
-}
-
-.chat-list-toggle:hover {
-  opacity: 1;
-}
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full height of the viewport */
-  width: 100vw;
-}
 .filter-toggle {
   position: fixed;
-  top: 125px; /* Positioned below the header */
+  top: 125px;
   right: 20px;
   z-index: 1000;
   background-color: #000080;
@@ -229,46 +248,120 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: background-color 0.3s, transform 0.3s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .filter-toggle:hover {
-  background-color: #c0c0e8;
+  background-color: #000060;
+  transform: translateY(-2px);
 }
 
 .filter-toggle.active {
-  transform: translateY(0); /* Remove vertical shift when active */
+  background-color: #ff4c4c;
 }
 
-/* Optional: To ensure proper spacing or formatting */
-.product-description {
-  margin-bottom: 10px;
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
+
 .sign-in-message {
   font-size: 1.2em;
-  color: #314acc; /* Blue theme color */
+  color: #314acc;
   text-align: center;
   margin: 15px 0;
-  padding: 10px;
-  background-color: #eef3ff; /* Light blue background */
-  border: 1px dashed #314acc; /* Dashed border */
+  padding: 15px;
+  background-color: #eef3ff;
+  border: 2px dashed #314acc;
   border-radius: 8px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .sign-in-message:hover {
-  background-color: #d8e2ff; /* Slightly darker blue on hover */
-  color: #1a3d9f; /* Darker blue text on hover */
+  background-color: #d8e2ff;
+  color: #1a3d9f;
   cursor: pointer;
+  transform: scale(1.05);
+}
+
+.seller-rating {
+  display: inline-flex;
+  align-items: center;
 }
 
 .seller-rating .star {
-  font-size: 14px;
-  color: #ccc; /* Default star color */
+  font-size: 16px;
+  color: #ffd700;
   margin-right: 2px;
 }
 
-.seller-rating .star.filled {
-  color: #ffac33; /* Filled star color */
+.seller-rating .star.empty {
+  color: #ccc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.product-card {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    padding: 0 15px 15px 15px;
+  }
+
+  .product-cards {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter {
+    min-width: 100%;
+  }
+
+  .filter-toggle {
+    top: 80px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .product-image {
+    height: 200px;
+  }
+
+  .product-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chat-button,
+  .sell-button,
+  .delete-button {
+    width: 100%;
+  }
 }
