@@ -1,0 +1,33 @@
+.filter-toggle {
+  position: fixed;
+  top: 125px;
+  right: 20px;
+  z-index: 1000;
+  background-color: #000080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.filter-toggle:hover {
+  background-color: #000060;
+  transform: translateY(-2px);
+}
+
+.filter-toggle.active {
+  background-color: #ff4c4c;
+}
+
+@media (max-width: 768px) {
+  .filter-toggle {
+    top: 80px;
+    right: 10px;
+  }
+}

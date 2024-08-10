@@ -1,0 +1,8 @@
+.chat-list-container {
+  overflow: hidden;
+  transition: width 0.3s;
+}
+
+.chat-list-container.open {
+  width: 35%;
+}
