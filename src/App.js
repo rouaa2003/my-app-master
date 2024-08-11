@@ -27,6 +27,8 @@ function App() {
 
   const navigate = useNavigate();
 
+  console.log("isAuthenticated", isAuthenticated, "isGuest", isGuest);
+
   useEffect(() => {}, [isAuthenticated, isGuest]);
 
   // Function to check if the user is authenticated

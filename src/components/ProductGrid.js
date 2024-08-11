@@ -5,20 +5,16 @@ import {
   getProducts,
   deleteProduct,
 } from "../api/apiService";
+import FilterToggle from "./FilterToggle";
+import Filters from "./Filters";
+import ProductList from "./ProductList";
+import ChatContainer from "./ChatContainer";
+
 import { Atom } from "react-loading-indicators";
-import { Filter } from "lucide-react";
-import ChatWindow from "./ChatWindow";
-import ChatList from "./ChatList";
-import { getRatingInfo } from "../utils/getRatingInfo";
+import { motion } from "framer-motion";
 import "./ProductGrid.css";
 
-function ProductGrid({
-  currentUserId,
-  isGuest,
-  isAuthenticated,
-  authStateChange,
-  onLoginSuccess,
-}) {
+function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -35,6 +31,7 @@ function ProductGrid({
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const toggleFilters = () => {
     setIsFiltersVisible(!isFiltersVisible);
@@ -147,12 +144,6 @@ function ProductGrid({
     setStatus(event.target.value);
   };
 
-  const getImageUrl = (fileUrl) => {
-    if (!fileUrl) return null;
-    const encodedUrl = encodeURIComponent(fileUrl);
-    return `http://www.product.somee.com/api/Product/GetFile?url=${encodedUrl}`;
-  };
-
   const handlePreviousImage = (productId) => {
     setImageIndices((prevIndices) => ({
       ...prevIndices,
@@ -198,206 +189,56 @@ function ProductGrid({
   }
 
   return (
-    <div className="product-grid-container">
-      <button
-        className={`filter-toggle ${isFiltersVisible ? "active" : ""}`}
-        onClick={toggleFilters}
-      >
-        <Filter size={18} />
-        {isFiltersVisible ? "Hide Filters" : "Show Filters"}
-      </button>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="product-grid-container"
+    >
+      <FilterToggle
+        isFiltersVisible={isFiltersVisible}
+        toggleFilters={toggleFilters}
+      />
       <div
         className={`product-grid ${isChatListOpen ? "shrink" : ""} ${
           isFiltersVisible ? "filters-visible" : ""
         }`}
       >
-        <div className={`filters ${isFiltersVisible ? "visible" : ""}`}>
-          <div className="filter">
-            <label htmlFor="category-select">Category</label>
-            <select
-              id="category-select"
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-            >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter">
-            <label htmlFor="country-select">Country</label>
-            <select
-              id="country-select"
-              value={selectedCountry}
-              onChange={handleCountryChange}
-            >
-              <option value="">All Countries</option>
-              {countries.map((country) => (
-                <option key={country.id} value={country.id}>
-                  {country.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter">
-            <label htmlFor="city-select">City</label>
-            <select
-              id="city-select"
-              value={selectedCity}
-              onChange={handleCityChange}
-              disabled={!selectedCountry}
-            >
-              <option value="">All Cities</option>
-              {cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter">
-            <label htmlFor="status-select">Status</label>
-            <select
-              id="status-select"
-              value={status}
-              onChange={handleStatusChange}
-            >
-              <option value="true">Available</option>
-              <option value="false">Sold</option>
-            </select>
-          </div>
-          <div className="filter">
-            <label htmlFor="search-input">Search</label>
-            <input
-              id="search-input"
-              type="text"
-              value={searchText}
-              onChange={handleSearchChange}
-              placeholder="Search products..."
-            />
-          </div>
-        </div>
-
-        <div className="product-cards">
-          {products.length > 0 ? (
-            products.map((product) => (
-              <div className="product-card" key={product.id}>
-                <div className="product-image">
-                  {product.files && product.files.length > 0 ? (
-                    <>
-                      <img
-                        src={getImageUrl(
-                          product.files[imageIndices[product.id]].url
-                        )}
-                        alt={product.title}
-                        onError={(error) => {
-                          console.log("error", error);
-                        }}
-                      />
-                      {product.files.length > 1 && (
-                        <>
-                          <button
-                            className="image-nav-button prev-button"
-                            onClick={() => handlePreviousImage(product.id)}
-                          >
-                            &#8249;
-                          </button>
-                          <button
-                            className="image-nav-button next-button"
-                            onClick={() => handleNextImage(product.id)}
-                          >
-                            &#8250;
-                          </button>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <div className="placeholder-image">No Image</div>
-                  )}
-                </div>
-                <div className="product-details">
-                  <h3 className="product-title">{product.title}</h3>
-                  <p className="product-price">${product.price}</p>
-                  <p className="product-location">
-                    {product.city.name}, {product.city.country.name}
-                  </p>
-                  <p className="product-description">{product.description}</p>
-                  <p className="product-status">
-                    {product.isAvailable
-                      ? `${product.quantity} Available`
-                      : "Sold"}
-                  </p>
-                  <p
-                    className={`seller-rating ${
-                      getRatingInfo(product.user.rating).class
-                    }`}
-                  >
-                    Seller Rating: {getRatingInfo(product.user.rating).phrase}
-                  </p>
-                </div>
-                <div className="product-actions">
-                  {console.log("isGuestisGuestisGuestisGuest", isGuest)}
-                  {isGuest ? (
-                    <p className="sign-in-message">Sign in to buy and sell</p>
-                  ) : (
-                    <>
-                      {String(product.user.id) === String(currentUserId) ? (
-                        <>
-                          {product.isAvailable && (
-                            <button className="sell-button">
-                              Mark as Sold
-                            </button>
-                          )}
-                          <button
-                            className="delete-button"
-                            onClick={() => handleDeleteProduct(product.id)}
-                          >
-                            Delete
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          className="chat-button"
-                          onClick={() =>
-                            handleChatClick(
-                              product.user.id,
-                              product.user.fullName
-                            )
-                          }
-                        >
-                          Message {product.user.fullName}
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No products available</p>
-          )}
-        </div>
-      </div>
-
-      <button className="chat-list-toggle" onClick={toggleChatList}>
-        {isChatListOpen ? "Close Chat List" : "Open Chat List"}
-      </button>
-
-      <div className={`chat-list-container ${isChatListOpen ? "open" : ""}`}>
-        {isChatListOpen && <ChatList onSelectChat={handleChatClick} />}
-      </div>
-
-      {activeChatSellerId && (
-        <ChatWindow
-          sellerId={activeChatSellerId}
-          onClose={handleCloseChat}
-          sellerName={activeChatSellerName}
+        <Filters
+          isFiltersVisible={isFiltersVisible}
+          categories={categories}
+          countries={countries}
+          cities={cities}
+          selectedCategory={selectedCategory}
+          selectedCountry={selectedCountry}
+          selectedCity={selectedCity}
+          status={status}
+          searchText={searchText}
+          handleCategoryChange={handleCategoryChange}
+          handleCountryChange={handleCountryChange}
+          handleCityChange={handleCityChange}
+          handleStatusChange={handleStatusChange}
+          handleSearchChange={handleSearchChange}
         />
-      )}
-    </div>
+        <ProductList
+          products={products}
+          currentUserId={currentUserId}
+          isGuest={isGuest}
+          handleChatClick={handleChatClick}
+          handleDeleteProduct={handleDeleteProduct}
+          imageIndices={imageIndices}
+          handlePreviousImage={handlePreviousImage}
+          handleNextImage={handleNextImage}
+        />
+      </div>
+      <ChatContainer
+        isChatListOpen={isChatListOpen}
+        activeChatSellerId={activeChatSellerId}
+        activeChatSellerName={activeChatSellerName}
+        handleChatClick={handleChatClick}
+        handleCloseChat={handleCloseChat}
+      />
+    </motion.div>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Atom } from "react-loading-indicators";
-import { getRatingInfo } from "../utils/getRatingInfo";
+import { renderStars } from "../utils/renderStars";
 import "./ProfileModal.css";
 
 function ProfileModal({ onClose, currentUserId, authToken }) {
@@ -59,7 +59,7 @@ function ProfileModal({ onClose, currentUserId, authToken }) {
         <span className="close" onClick={handleClose}>
           &times;
         </span>
-        <h2>Profile Details</h2>
+        <p className="heading">Profile Details</p>
         {isLoading ? (
           <div className="loading-container">
             <Atom
@@ -80,14 +80,11 @@ function ProfileModal({ onClose, currentUserId, authToken }) {
             <p>
               <span>Location:</span> {profileData?.city?.name || "N/A"}
             </p>
-            <p
-              className={`seller-rating ${
-                getRatingInfo(profileData?.rating).class
-              }`}
-            >
-              <span>Rating:</span>{" "}
-              {getRatingInfo(profileData?.rating).phrase || "N/A"}
-            </p>
+
+            <span>Rating</span>
+            <span className={`seller-rating`}>
+              {renderStars(profileData?.rating)}
+            </span>
           </div>
         )}
       </div>
