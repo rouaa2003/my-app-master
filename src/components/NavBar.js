@@ -5,6 +5,7 @@ import {
   faPlus,
   faUserCircle,
   faSignOutAlt,
+  faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import LoginForm from "./LoginForm"; // Import your LoginForm component
 import RegistrationForm from "./RegistrationForm"; // Import your RegistrationForm component
@@ -82,6 +83,9 @@ function NavBar({
               onClick={onProfileClick}
             >
               <FontAwesomeIcon icon={faUserCircle} />
+            </button>
+            <button className="nav-button" onClick={onLogout}>
+              <FontAwesomeIcon icon={faComments} />
             </button>
             <button className="nav-button logout-button" onClick={onLogout}>
               <FontAwesomeIcon icon={faSignOutAlt} />

@@ -1,0 +1,54 @@
+.filters {
+  position: fixed;
+  top: 165px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 128, 0.9);
+  z-index: 5;
+  border-bottom: 1px solid #ccc;
+  backdrop-filter: blur(5px);
+}
+
+.filter {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+.filter select,
+.filter input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.filter select:focus,
+.filter input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 128, 0.5);
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter {
+    min-width: 100%;
+  }
+}

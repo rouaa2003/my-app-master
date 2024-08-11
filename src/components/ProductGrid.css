@@ -3,300 +3,44 @@
   width: 100%;
   transition: width 0.3s;
   position: relative;
+  overflow-x: hidden;
 }
-/* Styling for the product grid */
+
 .product-grid {
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 0 30px 30px 30px;
-  margin-top: 160px; /* Adjusted to account for filters and toggle button */
+  margin-top: 250px;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   transition: margin-top 0.3s ease-in-out;
 }
 
 .product-grid:not(.filters-visible) {
-  margin-top: 60px; /* Reduced top margin when filters are hidden */
+  margin-top: 150px;
 }
 
-.filters {
-  position: fixed;
-  top: 165px; /* Positioned below the filter toggle button */
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px;
-  background-color: rgb(0, 0, 128);
-  z-index: 5;
-  border-bottom: 1px solid #ccc;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.filters:not(.visible) {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-.filter {
-  flex: 1;
-  min-width: 200px;
- 
-}
-
-.filter label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.filter select,
-.filter input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.product-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 30px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding-top: 150px; /* Adjust padding to avoid overlap with fixed filters */
-}
-
-.product-card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease-in-out;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-.product-image {
-  height: 200px;
-  overflow: hidden;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.placeholder-image {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f0f0;
-  color: #888;
-}
-
-.product-details {
-  padding: 15px;
-}
-
-.product-title {
-  margin: 0 0 10px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.product-price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #4a4a4a;
-  margin-bottom: 5px;
-}
-
-.product-location,
-.product-status,
-.product-description {
-  font-size: 14px;
-  color: #666;
-  margin: 5px 0;
-}
-
-.product-actions {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 15px 15px;
-}
-
-.chat-button,
-.sell-button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.chat-button {
-  background-color: #000080;
-  color: white;
-}
-
-.sell-button {
-  background-color: #f0f0f0;
-  color: #333;
-}
-
-.chat-button:hover,
-.sell-button:hover {
-  opacity: 0.9;
-}
-
-.delete-button {
-  background-color: #ff4c4c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.delete-button:hover {
-  background-color: #ff1a1a;
-  opacity: 0.9;
-}
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 .product-grid.shrink {
-  width: 75%; /* Shrink product grid width to 65% */
+  width: 65%;
 }
 
-.chat-list-container {
-  width: 0;
-  overflow: hidden;
-  transition: width 0.3s;
-  margin-top: 500px;
-}
-
-.chat-list-container.open {
-  width: 25%; /* Set chat list container width to 35% */
-}
-
-.chat-list-toggle {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: #000080;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-  z-index: 1000;
-  margin-bottom: 4rem;
-}
-
-.chat-list-toggle:hover {
-  opacity: 1;
-}
-=======
-
->>>>>>> parent of 3d371ef (Revert "cccc")
-=======
-
->>>>>>> parent of 3d371ef (Revert "cccc")
 .loading-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height of the viewport */
+  height: 100vh;
   width: 100vw;
-}
-.filter-toggle {
+  background-color: rgba(255, 255, 255, 0.8);
   position: fixed;
-  top: 125px; /* Positioned below the header */
-  right: 20px;
-  z-index: 1000;
-  background-color: #000080;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: background-color 0.3s, transform 0.3s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
-.filter-toggle:hover {
-  background-color: #c0c0e8;
-}
-
-.filter-toggle.active {
-  transform: translateY(0); /* Remove vertical shift when active */
-}
-/* Add these classes for rating color coding */
-.seller-rating {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.rating-very-poor {
-  color: #ff4c4c; /* Red */
-}
-
-.rating-poor {
-  color: #ff6f6f; /* Light Red */
-}
-
-.rating-fair {
-  color: #f2b632; /* Yellow */
-}
-
-.rating-good {
-  color: #4caf50; /* Green */
-}
-
-.rating-excellent {
-  color: #388e3c; /* Dark Green */
-}
-
-/* Optional: To ensure proper spacing or formatting */
-.product-description {
-  margin-bottom: 10px;
-}
-.sign-in-message {
-  font-size: 1.2em;
-  color: #314acc; /* Blue theme color */
-  text-align: center;
-  margin: 15px 0;
-  padding: 10px;
-  background-color: #eef3ff; /* Light blue background */
-  border: 1px dashed #314acc; /* Dashed border */
-  border-radius: 8px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.sign-in-message:hover {
-  background-color: #d8e2ff; /* Slightly darker blue on hover */
-  color: #1a3d9f; /* Darker blue text on hover */
-  cursor: pointer;
-}
-#search-input{
-  width:90%;
+@media (max-width: 768px) {
+  .product-grid {
+    padding: 0 15px 15px 15px;
+  }
 }

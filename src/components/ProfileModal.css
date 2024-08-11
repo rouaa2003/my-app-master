@@ -16,6 +16,11 @@
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
+.heading {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 900;
+}
 /* Modal Content */
 .modal.show {
   opacity: 1;
@@ -83,6 +88,16 @@
   font-weight: bold;
   color: #000080;
   font-size: 25px;
+}
+
+.seller-rating .star {
+  font-size: 14px;
+  color: #ccc; /* Default star color */
+  margin-right: 2px;
+}
+
+.seller-rating .star.filled {
+  color: #ffac33; /* Filled star color */
 }
 
 /* Animations */
