@@ -71,7 +71,6 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   }, []);
 
   const fetchProductsData = useCallback(async () => {
-    setIsLoading(true);
     try {
       const filters = {
         categoryId: selectedCategory || undefined,
