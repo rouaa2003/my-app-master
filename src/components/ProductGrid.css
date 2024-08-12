@@ -41,6 +41,10 @@
 
 @media (max-width: 768px) {
   .product-grid {
+    
     padding: 0 15px 15px 15px;
+  }
+  .product-grid-container{
+  margin-top: 140px;
   }
 }
