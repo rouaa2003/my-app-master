@@ -9,6 +9,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* In ProductActions.css */
+.product-actions {
+  margin-top: auto; /* Push actions to the bottom */
+}
+
 .buyer-actions {
   display: flex;
   align-items: center;

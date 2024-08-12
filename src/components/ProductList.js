@@ -1,4 +1,3 @@
-// ProductList.js
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "./ProductCard";
@@ -13,25 +12,26 @@ function ProductList({
   imageIndices,
   handlePreviousImage,
   handleNextImage,
-  handleMarkAsSold
+  handleMarkAsSold,
 }) {
   return (
     <AnimatePresence>
       <motion.div className="product-cards" layout>
         {products.length > 0 ? (
           products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              currentUserId={currentUserId}
-              isGuest={isGuest}
-              handleChatClick={handleChatClick}
-              handleDeleteProduct={handleDeleteProduct}
-              imageIndex={imageIndices[product.id]}
-              handlePreviousImage={handlePreviousImage}
-              handleNextImage={handleNextImage}
-              handleMarkAsSold={handleMarkAsSold}
-            />
+            <div key={product.id} className="product-card-wrapper">
+              <ProductCard
+                product={product}
+                currentUserId={currentUserId}
+                isGuest={isGuest}
+                handleChatClick={handleChatClick}
+                handleDeleteProduct={handleDeleteProduct}
+                imageIndex={imageIndices[product.id]}
+                handlePreviousImage={handlePreviousImage}
+                handleNextImage={handleNextImage}
+                handleMarkAsSold={handleMarkAsSold}
+              />
+            </div>
           ))
         ) : (
           <motion.p
