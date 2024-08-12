@@ -85,9 +85,7 @@ function NavBar({
             >
               <FontAwesomeIcon icon={faUserCircle} />
             </button>
-            <button className="nav-button" onClick={onLogout}>
-              <FontAwesomeIcon icon={faComments} />
-            </button>
+            
             <button className="nav-button logout-button" onClick={onLogout}>
               <FontAwesomeIcon icon={faSignOutAlt} />
             </button>

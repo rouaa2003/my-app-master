@@ -175,11 +175,13 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     }
   };
 
-
-  const  handleMarkAsSold= async (productId) => {
+  
+  const  handleMarkAsSold = async (productId) => {
     try {
+      // Find the product to be updated
       const product = products.find(p => p.id === productId);
-
+      
+      // Prepare the product data for updating
       const productData = {
         Id: productId,
         Title: product.title || '',
@@ -189,11 +191,13 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
         Quantity: product.quantity || '',
         CityId: product.cityId || '',
         Status: product.status || '',
-        IsAvailable: false
+        IsAvailable: false // Mark as sold
       };
 
+      // Call the API service to update the product
       await updateProduct(productData);
 
+      // Update the local state or UI as needed
       console.log('Product marked as sold successfully.');
     } catch (error) {
       console.error('Error marking product as sold:', error);
