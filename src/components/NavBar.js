@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import LoginForm from "./LoginForm"; // Import your LoginForm component
 import RegistrationForm from "./RegistrationForm"; // Import your RegistrationForm component
+import Header from "./Header";
 import "./NavBar.css";
 
 function NavBar({

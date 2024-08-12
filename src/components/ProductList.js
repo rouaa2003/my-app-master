@@ -13,6 +13,7 @@ function ProductList({
   imageIndices,
   handlePreviousImage,
   handleNextImage,
+  handleMarkAsSold
 }) {
   return (
     <AnimatePresence>
@@ -29,6 +30,7 @@ function ProductList({
               imageIndex={imageIndices[product.id]}
               handlePreviousImage={handlePreviousImage}
               handleNextImage={handleNextImage}
+              handleMarkAsSold={handleMarkAsSold}
             />
           ))
         ) : (
