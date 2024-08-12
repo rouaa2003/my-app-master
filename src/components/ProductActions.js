@@ -97,16 +97,14 @@ function ProductActions({
     }
   };
 
-  const renderStars = (selectedRating, isDisabled) => {
+  const renderStars = () => {
     return (
       <div className="star-rating">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`star ${star <= selectedRating ? "filled" : ""} ${
-              isDisabled ? "disabled" : ""
-            }`}
-            onClick={() => !isDisabled && handleRatingClick(star)}
+            className={`star ${star <= rating ? "filled" : ""}`}
+            onClick={() => handleRatingClick(star)}
           >
             &#9733;
           </span>
@@ -161,7 +159,7 @@ function ProductActions({
             Message {product.user.fullName}
           </motion.button>
           <div className="rating-container">
-            <div
+            {/* <div
               className={`star-rating ${hasRated ? "disabled" : ""}`}
               onMouseLeave={handleRatingLeave}
             >
@@ -177,22 +175,26 @@ function ProductActions({
                   &#9733;
                 </span>
               ))}
-            </div>
+            </div> */}
             {hasRated ? (
-              <div className="rating-message">
+              <div className="rating-confirmation">
                 <span className="rating-tick">&#10004;</span>
                 Rated
               </div>
             ) : (
-              <motion.button
-                className="submit-rating"
-                onClick={submitRating}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                disabled={rating === 0}
-              >
-                Rate
-              </motion.button>
+              <>
+                {" "}
+                {renderStars()}
+                <motion.button
+                  className="submit-rating"
+                  onClick={submitRating}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={rating === 0}
+                >
+                  Rate
+                </motion.button>
+              </>
             )}
           </div>
         </div>
