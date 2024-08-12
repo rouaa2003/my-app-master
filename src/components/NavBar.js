@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import LoginForm from "./LoginForm"; // Import your LoginForm component
 import RegistrationForm from "./RegistrationForm"; // Import your RegistrationForm component
-import Header from "./Header";
+
 import "./NavBar.css";
 
 function NavBar({
@@ -43,16 +43,8 @@ function NavBar({
     <>
       <nav>
         <h1 className="nav-p">Blue Market</h1>
-        <button
-          className="nav-button"
-          onClick={() =>
-            document
-              .getElementById("header")
-              .scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          <FontAwesomeIcon icon={faHome} />
-        </button>
+        
+         
 
         {!isAuthenticated ? (
           <>
