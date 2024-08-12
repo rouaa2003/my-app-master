@@ -15,6 +15,7 @@ function ProductCard({
   imageIndex,
   handlePreviousImage,
   handleNextImage,
+  handleMarkAsSold
 }) {
   const productVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -44,6 +45,7 @@ function ProductCard({
         isGuest={isGuest}
         handleChatClick={handleChatClick}
         handleDeleteProduct={handleDeleteProduct}
+        handleMarkAsSold={handleMarkAsSold}
       />
     </motion.div>
   );
