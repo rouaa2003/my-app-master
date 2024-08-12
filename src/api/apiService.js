@@ -90,43 +90,33 @@ export const deleteProduct = async (productId) => {
   }
 };
 
-
-
-
 // apiService.js
 
-
-// تأكد من أن هذا التعريف موجود
 export const updateProduct = async (productData) => {
   try {
-    
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(productData)) {
       formData.append(key, value);
     }
 
-    const response = await fetch(`http://www.product.somee.com/api/Product/UpdateProduct`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-      },
-      body: formData,
-    });
+    const response = await fetchWithAuth(
+      `http://www.product.somee.com/api/Product/UpdateProduct`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
 
     if (!response.ok) {
       const errorDetails = await response.text();
-      console.error('Server error details:', errorDetails);
-      throw new Error('Failed to update product');
+      console.error("Server error details:", errorDetails);
+      throw new Error("Failed to update product");
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error in updateProduct:', error);
+    console.error("Error in updateProduct:", error);
     throw error;
   }
 };
-
-
-
-
