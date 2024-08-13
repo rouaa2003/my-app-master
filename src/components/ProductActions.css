@@ -146,6 +146,16 @@
   display: flex;
   justify-content: space-around;
 }
+.sign-in-message {
+  border: 2px dotted #ccc; /* Add a dotted border */
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  background-color: #f9f9f9; /* Light background color */
+  z-index: 3;
+}
 
 @media (max-width: 480px) {
   .product-actions {
