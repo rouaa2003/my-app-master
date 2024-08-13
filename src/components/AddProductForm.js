@@ -5,7 +5,7 @@ import { fetchWithAuth } from "../api/fetchWithAuth";
 import { getCategories, getCountries } from "../api/apiService";
 import "./AddProductForm.css";
 
-function AddProductForm({ onClose, onSuccess }) {
+function AddProductForm({ onClose, onSuccess, onProductAdded }) {
   const {
     control,
     handleSubmit,
@@ -81,33 +81,17 @@ function AddProductForm({ onClose, onSuccess }) {
         }
       );
 
-      console.log("Full response:", response);
-
       if (response.ok) {
-        const responseText = await response.text();
-        console.log("Response text:", responseText);
-
-        if (responseText) {
-          try {
-            const result = JSON.parse(responseText);
-            console.log("Parsed JSON result:", result);
-          } catch (parseError) {
-            console.log("Response is not JSON, but request was successful");
-          }
-        } else {
-          console.log("Response is empty, but request was successful");
-        }
-
+        onProductAdded();
         setSuccess("Product added successfully!");
         setError(null);
 
         // Call onSuccess prop or onClose
         if (onSuccess) {
-          onSuccess();
+          onSuccess(); // Notify parent about the successful addition
         }
         onClose();
-      }
-      if (!response.ok) {
+      } else {
         const errorResponse = await response.json();
         const errorMessage =
           errorResponse.errorMessage || "An unknown error occurred";
@@ -117,7 +101,6 @@ function AddProductForm({ onClose, onSuccess }) {
       setError(`Error adding product: ${error.message}`);
       setSuccess(null);
       onClose();
-      console.error("Error adding product:", error);
     }
   };
 

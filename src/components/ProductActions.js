@@ -9,6 +9,7 @@ function ProductActions({
   handleChatClick,
   handleDeleteProduct,
   handleMarkAsSold,
+  handleMarkAsAvailable,
 }) {
   const [hasRated, setHasRated] = useState(false);
   const [rating, setRating] = useState(0);
@@ -125,7 +126,7 @@ function ProductActions({
     <div className="product-actions">
       {product.isAvailable ? (
         isOwner ? (
-          <>
+          <div className="action-btn">
             <motion.button
               className="sell-button"
               onClick={() => handleMarkAsSold(product.id)}
@@ -142,7 +143,7 @@ function ProductActions({
             >
               Delete
             </motion.button>
-          </>
+          </div>
         ) : (
           <div className="buyer-actions">
             <motion.button
@@ -183,14 +184,28 @@ function ProductActions({
           <div className="sold-out-overlay">
             <span>Sold Out</span>
           </div>
-          <motion.button
-            className="delete-button"
-            onClick={() => handleDeleteProduct(product.id)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Delete
-          </motion.button>
+          <div className="action-btn">
+            <>
+              <motion.button
+                className="delete-button"
+                onClick={() => handleDeleteProduct(product.id)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Delete
+              </motion.button>
+            </>
+            <>
+              <motion.button
+                className="sell-button"
+                onClick={() => handleMarkAsAvailable(product.id)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Mark as Available
+              </motion.button>
+            </>
+          </div>
         </>
       )}
 

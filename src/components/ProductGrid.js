@@ -14,7 +14,13 @@ import { Atom } from "react-loading-indicators";
 import { motion } from "framer-motion";
 import "./ProductGrid.css";
 
-function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
+function ProductGrid({
+  currentUserId,
+  isGuest,
+  isAuthenticated,
+  onProductAdded,
+  authStateChange,
+}) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -23,7 +29,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(3);
   const [activeChatSellerId, setActiveChatSellerId] = useState(null);
   const [activeChatSellerName, setActiveChatSellerName] = useState(null);
 
@@ -31,8 +37,6 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
-
-  const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const toggleFilters = () => {
     setIsFiltersVisible(!isFiltersVisible);
@@ -111,8 +115,9 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   }, [selectedCategory, selectedCity, selectedCountry, searchText, status]);
 
   useEffect(() => {
+    setIsLoading(true);
     fetchProductsData();
-  }, [fetchProductsData]);
+  }, [fetchProductsData, authStateChange]);
 
   useEffect(() => {
     // Perform actions when currentUserId changes
@@ -141,8 +146,9 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     setSearchText(event.target.value);
   };
 
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
+  const handleStatusChange = (e) => {
+    const value = e.target.value;
+    setStatus(value === "" ? undefined : value); // Convert to number or set to undefined
   };
 
   const handlePreviousImage = (productId) => {
@@ -211,6 +217,43 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     }
   };
 
+  //handleMarkAsAvailable
+
+  const handleMarkAsAvailable = async (productId) => {
+    try {
+      // Find the product to be updated
+      const product = products.find((p) => p.id === productId);
+
+      // Prepare the product data for updating
+      const productData = {
+        Id: productId,
+        Title: product.title || "",
+        Description: product.description || "",
+        Address: product.address || "",
+        Price: product.price || "",
+        Quantity: product.quantity || "",
+        CityId: product.city.id || "",
+        Status: 1,
+        IsAvailable: true, // Mark as available
+      };
+      console.log("productData", productData);
+      // Call the API service to update the product
+      await updateProduct(productData);
+
+      // Update the local state or UI as needed
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === productId ? { ...p, isAvailable: true, status: 1 } : p
+        )
+      );
+
+      // Update the local state or UI as needed
+      console.log("Product marked as availabe successfully.");
+    } catch (error) {
+      console.error("Error marking product as availabe:", error);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="loading-indicator">
@@ -266,6 +309,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
           handlePreviousImage={handlePreviousImage}
           handleNextImage={handleNextImage}
           handleMarkAsSold={handleMarkAsSold}
+          handleMarkAsAvailable={handleMarkAsAvailable}
         />
       </div>
       <ChatContainer
