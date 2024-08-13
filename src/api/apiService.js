@@ -90,43 +90,48 @@ export const deleteProduct = async (productId) => {
   }
 };
 
-
-
-
 // apiService.js
 
-
-// تأكد من أن هذا التعريف موجود
 export const updateProduct = async (productData) => {
   try {
-    
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(productData)) {
       formData.append(key, value);
     }
 
-    const response = await fetch(`http://www.product.somee.com/api/Product/UpdateProduct`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-      },
-      body: formData,
-    });
+    const token = localStorage.getItem("authToken"); // Or another method to retrieve the auth token
+
+    const response = await fetch(
+      `http://www.product.somee.com/api/Product/UpdateProduct`,
+      {
+        method: "PUT",
+        body: formData,
+        headers: {
+          Authorization: token, // Include the authorization token
+          // Note: Don't include Content-Type when sending FormData, fetch will set it automatically
+        },
+      }
+    );
+
+    // Check if the response was successful
+    console.log("response.ok", response.ok);
 
     if (!response.ok) {
-      const errorDetails = await response.text();
-      console.error('Server error details:', errorDetails);
-      throw new Error('Failed to update product');
+      console.error("Server error status:", response.status);
+      throw new Error("Failed to update product");
     }
 
-    return await response.json();
+    // If the response has JSON data, parse it
+    const result = await response.json();
+
+    if (result.errorMessage === null) {
+      return { success: true, message: "Product updated successfully" };
+    } else {
+      throw new Error(result.errorMessage || "Unknown error occurred");
+    }
   } catch (error) {
-    console.error('Error in updateProduct:', error);
+    console.error("Error in updateProduct:", error);
     throw error;
   }
 };
-
-
-
-

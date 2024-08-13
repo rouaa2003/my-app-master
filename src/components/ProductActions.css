@@ -1,12 +1,31 @@
+/* ProductActions.css */
 .product-actions {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* In ProductActions.css */
+.product-actions {
+  margin-top: auto; /* Push actions to the bottom */
+}
+
+.buyer-actions {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 20px 20px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .chat-button,
 .sell-button,
-.delete-button {
+.delete-button,
+.submit-rating {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -14,58 +33,135 @@
   font-size: 14px;
   font-weight: bold;
   transition: all 0.3s ease;
+  margin: 5px 0;
 }
 
 .chat-button {
-  background-color: #000080;
+  background-color: #007bff;
   color: white;
+  flex: 1;
+  margin-right: 10px;
 }
 
 .sell-button {
-  background-color: #4caf50;
+  background-color: #28a745;
   color: white;
 }
 
 .delete-button {
-  background-color: #ff4c4c;
+  background-color: #dc3545;
   color: white;
+}
+
+.submit-rating {
+  background-color: #17a2b8;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
 }
 
 .chat-button:hover,
 .sell-button:hover,
-.delete-button:hover {
+.delete-button:hover,
+.submit-rating:hover {
   opacity: 0.9;
   transform: translateY(-2px);
 }
 
-.sign-in-message {
-  font-size: 1.2em;
-  color: #314acc;
-  text-align: center;
-  margin: 15px 0;
-  padding: 15px;
-  background-color: #eef3ff;
-  border: 2px dashed #314acc;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+.star-rating:hover .star {
+  color: #ffc107;
 }
 
-.sign-in-message:hover {
-  background-color: #d8e2ff;
-  color: #1a3d9f;
+.star-rating .star:hover ~ .star {
+  color: #ddd;
+}
+
+.rating-confirmation {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 6px;
+  border-radius: 5px;
+
+  text-align: center;
+  font-weight: bold;
+}
+
+.rating-tick {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+}
+
+.star-rating {
+  display: inline-block;
+  font-size: 24px;
   cursor: pointer;
-  transform: scale(1.05);
+  margin-right: 10px;
+}
+
+.star {
+  color: #ddd;
+  transition: color 0.2s ease-in-out;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.star-rating:not(.disabled):hover .star {
+  color: #ffc107;
+}
+
+.star-rating:not(.disabled) .star:hover ~ .star {
+  color: #ddd;
+}
+
+.star-rating.disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.star-rating.disabled .star {
+  cursor: default;
+}
+
+.rating-message {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.rating-tick {
+  font-size: 18px;
+  margin-right: 5px;
 }
 
 @media (max-width: 480px) {
   .product-actions {
+    padding: 10px;
+  }
+
+  .buyer-actions {
     flex-direction: column;
-    gap: 10px;
   }
 
   .chat-button,
   .sell-button,
-  .delete-button {
+  .delete-button,
+  .submit-rating {
+    font-size: 12px;
+    padding: 8px 16px;
     width: 100%;
+    margin: 5px 0;
+  }
+
+  .rating-container {
+    margin-top: 10px;
   }
 }

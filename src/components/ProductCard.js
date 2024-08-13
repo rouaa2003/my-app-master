@@ -15,7 +15,7 @@ function ProductCard({
   imageIndex,
   handlePreviousImage,
   handleNextImage,
-  handleMarkAsSold
+  handleMarkAsSold,
 }) {
   const productVariants = {
     hidden: { opacity: 0, scale: 0.8 },
