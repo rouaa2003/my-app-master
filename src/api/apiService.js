@@ -114,7 +114,14 @@ export const updateProduct = async (productData) => {
       throw new Error("Failed to update product");
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // Check if the response is successful (even with null values)
+    if (result.errorMessage === null) {
+      return { success: true, message: "Product updated successfully" };
+    } else {
+      throw new Error(result.errorMessage || "Unknown error occurred");
+    }
   } catch (error) {
     console.error("Error in updateProduct:", error);
     throw error;

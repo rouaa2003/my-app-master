@@ -9,7 +9,7 @@ import FilterToggle from "./FilterToggle";
 import Filters from "./Filters";
 import ProductList from "./ProductList";
 import ChatContainer from "./ChatContainer";
-import { updateProduct } from '../api/apiService'; 
+import { updateProduct } from "../api/apiService";
 import { Atom } from "react-loading-indicators";
 import { motion } from "framer-motion";
 import "./ProductGrid.css";
@@ -31,6 +31,7 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+
   const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const toggleFilters = () => {
@@ -175,36 +176,33 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
     }
   };
 
-  
-  const  handleMarkAsSold = async (productId) => {
+  const handleMarkAsSold = async (productId) => {
     try {
       // Find the product to be updated
-      const product = products.find(p => p.id === productId);
-      
+      const product = products.find((p) => p.id === productId);
+
       // Prepare the product data for updating
       const productData = {
         Id: productId,
-        Title: product.title || '',
-        Description: product.description || '',
-        Address: product.address || '',
-        Price: product.price || '',
-        Quantity: product.quantity || '',
-        CityId: product.cityId || '',
-        Status: product.status || '',
-        IsAvailable: false // Mark as sold
+        Title: product.title || "",
+        Description: product.description || "",
+        Address: product.address || "",
+        Price: product.price || "",
+        Quantity: product.quantity || "",
+        CityId: product.city.id || "",
+        Status: 0,
+        IsAvailable: false, // Mark as sold
       };
-
+      console.log("productData", productData);
       // Call the API service to update the product
       await updateProduct(productData);
 
       // Update the local state or UI as needed
-      console.log('Product marked as sold successfully.');
+      console.log("Product marked as sold successfully.");
     } catch (error) {
-      console.error('Error marking product as sold:', error);
+      console.error("Error marking product as sold:", error);
     }
   };
-    
-  
 
   if (isLoading) {
     return (

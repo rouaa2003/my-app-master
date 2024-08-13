@@ -13,6 +13,7 @@ function ProductList({
   handlePreviousImage,
   handleNextImage,
   handleMarkAsSold,
+  isSold,
 }) {
   return (
     <AnimatePresence>
