@@ -79,8 +79,9 @@ function Filters({
       <div className="filter">
         <label htmlFor="status-select">Availablity</label>
         <select id="status-select" value={status} onChange={handleStatusChange}>
-          <option value="true">Available</option>
-          <option value="false">Sold</option>
+          <option value="3">All</option>
+          <option value="1">Available</option>
+          <option value="0">Sold</option>
         </select>
       </div>
       <div className="filter">

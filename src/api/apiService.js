@@ -37,16 +37,20 @@ export const getCountries = async () => {
 export const getProducts = async (filters) => {
   try {
     const query = new URLSearchParams();
+    console.log("filters.status", filters.status);
 
     // Only add parameters if they have a value
     if (filters.categoryId) query.append("categoryId", filters.categoryId);
     if (filters.cityId) query.append("cityId", filters.cityId);
     if (filters.countryId) query.append("countryId", filters.countryId);
-    if (filters.textSearch) query.append("textSearch", filters.textSearch);
-    if (filters.status !== undefined) query.append("status", filters.status);
 
-    if (filters.myProducts !== undefined)
-      query.append("myProducts", filters.myProducts);
+    if (filters.textSearch) query.append("textSearch", filters.textSearch);
+
+    if (
+      (filters.myProducts !== undefined && filters.status == 1) ||
+      filters.status == 0
+    )
+      query.append("status", filters.status);
 
     const queryString = query.toString();
     const url = `http://www.product.somee.com/api/Product/GetAllProducts${

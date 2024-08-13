@@ -29,7 +29,7 @@ function ProductGrid({
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState(undefined);
+  const [status, setStatus] = useState(3);
   const [activeChatSellerId, setActiveChatSellerId] = useState(null);
   const [activeChatSellerName, setActiveChatSellerName] = useState(null);
 
@@ -37,8 +37,6 @@ function ProductGrid({
   const [imageIndices, setImageIndices] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
-
-  const [hoveredProduct, setHoveredProduct] = useState(null);
 
   const toggleFilters = () => {
     setIsFiltersVisible(!isFiltersVisible);
@@ -150,7 +148,7 @@ function ProductGrid({
 
   const handleStatusChange = (e) => {
     const value = e.target.value;
-    setStatus(value === "" ? undefined : Number(value)); // Convert to number or set to undefined
+    setStatus(value === "" ? undefined : value); // Convert to number or set to undefined
   };
 
   const handlePreviousImage = (productId) => {
