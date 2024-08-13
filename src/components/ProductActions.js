@@ -115,7 +115,16 @@ function ProductActions({
   if (isGuest) {
     return (
       <div className="product-actions">
-        <p className="sign-in-message">Sign in to buy and sell</p>
+        {product.isAvailable ? (
+          <p className="sign-in-message">Sign in to buy and sell</p>
+        ) : (
+          <>
+            <div className="sold-out-overlay">
+              <span>Sold Out</span>
+            </div>
+            <p className="sign-in-message">Sign in to buy and sell</p>
+          </>
+        )}
       </div>
     );
   }
