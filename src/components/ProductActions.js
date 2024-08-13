@@ -179,9 +179,19 @@ function ProductActions({
           </div>
         )
       ) : (
-        <div className="sold-out-overlay">
-          <span>Sold Out</span>
-        </div>
+        <>
+          <div className="sold-out-overlay">
+            <span>Sold Out</span>
+          </div>
+          <motion.button
+            className="delete-button"
+            onClick={() => handleDeleteProduct(product.id)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Delete
+          </motion.button>
+        </>
       )}
 
       {showRatingConfirmation && (

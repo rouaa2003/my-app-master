@@ -12,6 +12,7 @@ function Filters({
   selectedCountry,
   selectedCity,
   status,
+  isAvailable,
   searchText,
   handleCategoryChange,
   handleCountryChange,
@@ -75,7 +76,7 @@ function Filters({
         </select>
       </div>
       <div className="filter">
-        <label htmlFor="status-select">Status</label>
+        <label htmlFor="status-select">Availablity</label>
         <select id="status-select" value={status} onChange={handleStatusChange}>
           <option value="true">Available</option>
           <option value="false">Sold</option>
