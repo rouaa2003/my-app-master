@@ -39,7 +39,7 @@
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-  z-index: 10;
+  z-index: 1;
   pointer-events: none; /* Allow interaction with delete button */
 }
 
