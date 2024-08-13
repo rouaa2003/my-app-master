@@ -126,6 +126,7 @@ function ProductActions({
     <div className="product-actions">
       {product.isAvailable ? (
         isOwner ? (
+          // Case: Available and Owner
           <div className="action-btn">
             <motion.button
               className="sell-button"
@@ -145,6 +146,7 @@ function ProductActions({
             </motion.button>
           </div>
         ) : (
+          // Case: Available and Not Owner
           <div className="buyer-actions">
             <motion.button
               className="chat-button"
@@ -179,32 +181,48 @@ function ProductActions({
             </div>
           </div>
         )
-      ) : (
+      ) : isOwner ? (
+        // Case: Not Available and Owner
         <>
           <div className="sold-out-overlay">
             <span>Sold Out</span>
           </div>
           <div className="action-btn">
-            <>
-              <motion.button
-                className="delete-button"
-                onClick={() => handleDeleteProduct(product.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Delete
-              </motion.button>
-            </>
-            <>
-              <motion.button
-                className="sell-button"
-                onClick={() => handleMarkAsAvailable(product.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Mark as Available
-              </motion.button>
-            </>
+            <motion.button
+              className="delete-button"
+              onClick={() => handleDeleteProduct(product.id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Delete
+            </motion.button>
+            <motion.button
+              className="sell-button"
+              onClick={() => handleMarkAsAvailable(product.id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Mark as Available
+            </motion.button>
+          </div>
+        </>
+      ) : (
+        // Case: Not Available and Not Owner
+        <>
+          <div className="sold-out-overlay">
+            <span>Sold Out</span>
+          </div>
+          <div className="buyer-actions">
+            <motion.button
+              className="chat-button"
+              onClick={() =>
+                handleChatClick(product.user.id, product.user.fullName)
+              }
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Message {product.user.fullName}
+            </motion.button>
           </div>
         </>
       )}
