@@ -198,6 +198,13 @@ function ProductGrid({ currentUserId, isGuest, isAuthenticated }) {
       await updateProduct(productData);
 
       // Update the local state or UI as needed
+      setProducts((prevProducts) =>
+        prevProducts.map((p) =>
+          p.id === productId ? { ...p, isAvailable: false, status: 0 } : p
+        )
+      );
+
+      // Update the local state or UI as needed
       console.log("Product marked as sold successfully.");
     } catch (error) {
       console.error("Error marking product as sold:", error);

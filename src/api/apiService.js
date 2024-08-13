@@ -100,23 +100,31 @@ export const updateProduct = async (productData) => {
       formData.append(key, value);
     }
 
-    const response = await fetchWithAuth(
+    const token = localStorage.getItem("authToken"); // Or another method to retrieve the auth token
+
+    const response = await fetch(
       `http://www.product.somee.com/api/Product/UpdateProduct`,
       {
         method: "PUT",
         body: formData,
+        headers: {
+          Authorization: token, // Include the authorization token
+          // Note: Don't include Content-Type when sending FormData, fetch will set it automatically
+        },
       }
     );
 
+    // Check if the response was successful
+    console.log("response.ok", response.ok);
+
     if (!response.ok) {
-      const errorDetails = await response.text();
-      console.error("Server error details:", errorDetails);
+      console.error("Server error status:", response.status);
       throw new Error("Failed to update product");
     }
 
+    // If the response has JSON data, parse it
     const result = await response.json();
 
-    // Check if the response is successful (even with null values)
     if (result.errorMessage === null) {
       return { success: true, message: "Product updated successfully" };
     } else {
