@@ -116,6 +116,10 @@ function App() {
     window.location.reload();
   };
 
+  const handleProductAdded = () => {
+    // Trigger a refetch of product data in ProductGrid
+    setAuthStateChange((prev) => prev + 1); // This will cause a re-render in ProductGrid
+  };
   useEffect(() => {
     console.log("App useEffect triggered. AuthStateChange:", authStateChange);
     checkAuthentication();
@@ -143,6 +147,7 @@ function App() {
               isAuthenticated={isAuthenticated}
               authStateChange={authStateChange}
               onLoginSuccess={handleSuccessRefetch}
+              onProductAdded={handleProductAdded}
             />
           </main>
           <Footer />
@@ -150,10 +155,7 @@ function App() {
           {isAddProductOpen && (
             <AddProductForm
               onClose={() => setAddProductOpen(false)}
-              onSuccess={() => {
-                setAddProductOpen(false);
-                window.location.reload();
-              }}
+              onProductAdded={handleProductAdded}
             />
           )}
           {isProfileOpen && (

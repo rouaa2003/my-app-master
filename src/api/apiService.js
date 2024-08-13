@@ -44,6 +44,7 @@ export const getProducts = async (filters) => {
     if (filters.countryId) query.append("countryId", filters.countryId);
     if (filters.textSearch) query.append("textSearch", filters.textSearch);
     if (filters.status !== undefined) query.append("status", filters.status);
+
     if (filters.myProducts !== undefined)
       query.append("myProducts", filters.myProducts);
 

@@ -13,7 +13,7 @@ function ProductList({
   handlePreviousImage,
   handleNextImage,
   handleMarkAsSold,
-  isSold,
+  handleMarkAsAvailable,
 }) {
   return (
     <AnimatePresence>
@@ -31,6 +31,7 @@ function ProductList({
                 handlePreviousImage={handlePreviousImage}
                 handleNextImage={handleNextImage}
                 handleMarkAsSold={handleMarkAsSold}
+                handleMarkAsAvailable={handleMarkAsAvailable}
               />
             </div>
           ))

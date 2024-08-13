@@ -20,6 +20,7 @@ function Filters({
   handleStatusChange,
   handleSearchChange,
 }) {
+  console.log("statusdasds", status);
   return (
     <motion.div
       className={`filters ${isFiltersVisible ? "visible" : ""}`}
